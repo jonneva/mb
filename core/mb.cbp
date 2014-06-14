@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="mb" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Outrun_miniboi" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option use_console_runner="0" />
+				<Compiler>
+					<Add option="-std=c++0x" />
+					<Add option="-g" />
+					<Add option="-fpermissive -Wunused-function" />
+					<Add directory="TVoutfonts" />
+					<Add directory="TVoutSFML" />
+					<Add directory="Controllers" />
+					<Add directory="Game" />
+					<Add directory="Graphics" />
+					<Add directory="Miniboi" />
+				</Compiler>
+				<Linker>
+					<Add library="sfml-graphics" />
+					<Add library="sfml-window" />
+					<Add library="sfml-system" />
+					<Add directory="TVoutfonts" />
+					<Add directory="TVoutSFML" />
+					<Add directory="Controllers" />
+					<Add directory="Game" />
+					<Add directory="Graphics" />
+					<Add directory="Miniboi" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="Graphics/ferrari.cpp" />
+		<Unit filename="Graphics/ferrari.h" />
+		<Unit filename="Graphics/sky.h" />
+		<Unit filename="Graphics/sky2.cpp" />
+		<Unit filename="Miniboi/Miniboi.cpp" />
+		<Unit filename="Miniboi/Miniboi.h" />
+		<Unit filename="Miniboi/Miniboi3D.h" />
+		<Unit filename="Miniboi/Miniboi_emu.cpp" />
+		<Unit filename="Miniboi/Miniboi_emu.h" />
+		<Unit filename="Miniboi/Miniboi_math.cpp" />
+		<Unit filename="Miniboi/Miniboi_math.h" />
+		<Unit filename="Miniboi/Miniboi_trig.cpp" />
+		<Unit filename="Miniboi/Miniboi_trig.h" />
+		<Unit filename="Miniboi/Polygon3D.cpp" />
+		<Unit filename="Miniboi/Polygon3D.h" />
+		<Unit filename="Miniboi/Polygonrenderer.cpp" />
+		<Unit filename="Miniboi/Polygonrenderer.h" />
+		<Unit filename="Miniboi/Primitives.cpp" />
+		<Unit filename="Miniboi/Primitives.h" />
+		<Unit filename="Miniboi/Rectangle3D.cpp" />
+		<Unit filename="Miniboi/Rectangle3D.h" />
+		<Unit filename="Miniboi/Scanconverter.cpp" />
+		<Unit filename="Miniboi/Scanconverter.h" />
+		<Unit filename="Miniboi/Solidpolygon3D.h" />
+		<Unit filename="Miniboi/Solidpolygonrenderer.cpp" />
+		<Unit filename="Miniboi/Solidpolygonrenderer.h" />
+		<Unit filename="Miniboi/Transform3D.h" />
+		<Unit filename="Miniboi/Vector3D.cpp" />
+		<Unit filename="Miniboi/Vector3D.h" />
+		<Unit filename="Miniboi/ViewWindow.cpp" />
+		<Unit filename="Miniboi/ViewWindow.h" />
+		<Unit filename="Miniboi/binary.h" />
+		<Unit filename="main.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
