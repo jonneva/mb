@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include "Miniboi_math.h" // needed for polygon filling
 #include "Vect2D.h"
+#include "Transform2D.h"
 
 //#define MINIBOI_TRIG // if fixed point trigonometric needed
 
