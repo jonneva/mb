@@ -6,7 +6,7 @@
 //#include <vector>
 #include <cmath>
 //#include <limits>
-#include "Miniboi.h"
+
 
 #define FLT_EPSILON 1.19209290E-07F // decimal constant
 #define PI 3.14159265
@@ -68,7 +68,6 @@ namespace Miniboi2D
     public:
         float x;
         float y;
-        float z;
 
         Vect2D();
 

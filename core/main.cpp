@@ -15,6 +15,7 @@ using namespace std;
 
 Miniboi MB;
 uint8_t scrbuffer[504]; // the screen buffer
+Miniboi2D::Vect2D V1(0,0);
 
 
 void setup() {
@@ -23,6 +24,7 @@ void setup() {
 
 void loop() {
     MB.set_pixel(0,0,1);
+    MB.set_pixel(V1,1);
 }
 
 

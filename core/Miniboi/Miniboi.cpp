@@ -54,10 +54,10 @@ void Miniboi::set_pixel(uint8_t x, uint8_t y, char c) {
 	buffer[(y >> 3) * 84 + x] &= ~(0x80 >> (y & 7));
 }// end of set_pixel
 
-void Miniboi::set_pixel(Vect2D& vect, char c) {
+void Miniboi::set_pixel(Miniboi2D::Vect2D vect, char c) {
 	int x, y;
-	x = convertFromViewXToScreenX(0.5f);
-    y = convertFromViewYToScreenY(0.5f);
+	x = convertFromViewXToScreenX(vect.x);
+    y = convertFromViewYToScreenY(vect.y);
 	if (x >= 84 || y >= 48) return;
 	if (c==WHITE) {buffer[(y >> 3) * 84 + x] |= (0x80 >> (y & 7)); return;}
 	buffer[(y >> 3) * 84 + x] &= ~(0x80 >> (y & 7));

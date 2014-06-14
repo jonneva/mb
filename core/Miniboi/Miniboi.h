@@ -32,7 +32,7 @@ typedef struct
 
 #define clear_screen()	fill(0)
 
-class Vect2D; // Forward declaration
+using namespace Miniboi2D;
 
 class Miniboi {
 public:
@@ -44,7 +44,7 @@ public:
 	unsigned long millis();
 	void delay(unsigned int);
 	void set_pixel(uint8_t,uint8_t,char);
-    void set_pixel(Vect2D&,char);
+    void set_pixel(Vect2D,char);
 	void draw_line(uint8_t,uint8_t, uint8_t, uint8_t, char);
     void draw_column(uint8_t, uint16_t, uint16_t, uint8_t);
     void draw_row(uint8_t, uint16_t, uint16_t, uint8_t);
