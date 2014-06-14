@@ -54,6 +54,15 @@ void Miniboi::set_pixel(uint8_t x, uint8_t y, char c) {
 	buffer[(y >> 3) * 84 + x] &= ~(0x80 >> (y & 7));
 }// end of set_pixel
 
+void Miniboi::set_pixel(Vect2D& vect, char c) {
+	int x, y;
+	x = convertFromViewXToScreenX(0.5f);
+    y = convertFromViewYToScreenY(0.5f);
+	if (x >= 84 || y >= 48) return;
+	if (c==WHITE) {buffer[(y >> 3) * 84 + x] |= (0x80 >> (y & 7)); return;}
+	buffer[(y >> 3) * 84 + x] &= ~(0x80 >> (y & 7));
+}// end of set_pixel
+
 void Miniboi::draw_line(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, char c) {
     // add smart clipping here !!!!
 	if (x0 > 84 || y0 > 48 || x1 > 84 || y1 > 48)

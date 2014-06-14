@@ -1413,10 +1413,11 @@
 	"Miniboi_emu.h"
 	"Miniboi3D.h"
 
-1402749625 /home/jonne/mb/core/Miniboi/Miniboi.h
+1402773419 /home/jonne/mb/core/Miniboi/Miniboi.h
 	<stdint.h>
 	<stdlib.h>
 	"Miniboi_math.h"
+	"Vect2D.h"
 
 1402648980 /home/jonne/mb/core/Miniboi/Miniboi_math.h
 	"Miniboi_trig.h"
@@ -1525,10 +1526,9 @@
 	<algorithm>
 	"Scanconverter.h"
 
-1402705162 source:/home/jonne/mb/core/Miniboi/Solidpolygonrenderer.cpp
+1402749548 source:/home/jonne/mb/core/Miniboi/Solidpolygonrenderer.cpp
 	"Solidpolygonrenderer.h"
 	"Solidpolygon3D.h"
-	"Primitives.h"
 	"Miniboi.h"
 
 1402495565 source:/home/jonne/mb/core/Miniboi/Vector3D.cpp
@@ -1543,4 +1543,33 @@
 1402496435 source:/home/jonne/mb/core/Miniboi/ViewWindow.cpp
 	<cmath>
 	"ViewWindow.h"
+
+1397141806 source:/home/jonne/mb/core/Graphics/ferrari.cpp
+	"ferrari.h"
+
+1397141078 /home/jonne/mb/core/Graphics/ferrari.h
+
+1400704105 source:/home/jonne/mb/core/Graphics/sky2.cpp
+	"sky.h"
+
+1395606906 /home/jonne/mb/core/Graphics/sky.h
+
+1402772112 source:/home/jonne/mb/core/Miniboi/Vect2D.cpp
+	"Vect2D.h"
+	"Miniboi_math.h"
+	"Miniboi.h"
+	<limits>
+	<cmath>
+	<cassert>
+	<sstream>
+	<algorithm>
+	"Transform2D.h"
+
+1402772132 /home/jonne/mb/core/Miniboi/Vect2D.h
+	<string>
+	<cmath>
+	"Miniboi.h"
+
+1402771065 /home/jonne/mb/core/Miniboi/Transform2D.h
+	"Vect2D.h"
 

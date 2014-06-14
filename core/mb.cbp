@@ -56,8 +56,6 @@
 		<Unit filename="Miniboi/Polygon3D.h" />
 		<Unit filename="Miniboi/Polygonrenderer.cpp" />
 		<Unit filename="Miniboi/Polygonrenderer.h" />
-		<Unit filename="Miniboi/Primitives.cpp" />
-		<Unit filename="Miniboi/Primitives.h" />
 		<Unit filename="Miniboi/Rectangle3D.cpp" />
 		<Unit filename="Miniboi/Rectangle3D.h" />
 		<Unit filename="Miniboi/Scanconverter.cpp" />
@@ -65,7 +63,10 @@
 		<Unit filename="Miniboi/Solidpolygon3D.h" />
 		<Unit filename="Miniboi/Solidpolygonrenderer.cpp" />
 		<Unit filename="Miniboi/Solidpolygonrenderer.h" />
+		<Unit filename="Miniboi/Transform2D.h" />
 		<Unit filename="Miniboi/Transform3D.h" />
+		<Unit filename="Miniboi/Vect2D.cpp" />
+		<Unit filename="Miniboi/Vect2D.h" />
 		<Unit filename="Miniboi/Vector3D.cpp" />
 		<Unit filename="Miniboi/Vector3D.h" />
 		<Unit filename="Miniboi/ViewWindow.cpp" />

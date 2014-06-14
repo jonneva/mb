@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "Miniboi_math.h" // needed for polygon filling
+#include "Vect2D.h"
 
 //#define MINIBOI_TRIG // if fixed point trigonometric needed
 
@@ -31,6 +32,8 @@ typedef struct
 
 #define clear_screen()	fill(0)
 
+class Vect2D; // Forward declaration
+
 class Miniboi {
 public:
     uint8_t* buffer; // Teh screen buffer
@@ -41,11 +44,14 @@ public:
 	unsigned long millis();
 	void delay(unsigned int);
 	void set_pixel(uint8_t,uint8_t,char);
+    void set_pixel(Vect2D&,char);
 	void draw_line(uint8_t,uint8_t, uint8_t, uint8_t, char);
     void draw_column(uint8_t, uint16_t, uint16_t, uint8_t);
     void draw_row(uint8_t, uint16_t, uint16_t, uint8_t);
     void draw_rect(uint8_t,uint8_t,uint8_t,uint8_t,char,char);
     void draw_poly(uint8_t, point2D*, char, char);
+    int convertFromViewXToScreenX(float x) const { return (int) x + XMAX/2; }
+    int convertFromViewYToScreenY(float y) const { return (int)-y + YMAX/2; }
 
 private:
     void sp(uint8_t,uint8_t,char);
