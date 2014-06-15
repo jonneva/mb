@@ -52,6 +52,8 @@
 		<Unit filename="Miniboi/Miniboi_math.h" />
 		<Unit filename="Miniboi/Miniboi_trig.cpp" />
 		<Unit filename="Miniboi/Miniboi_trig.h" />
+		<Unit filename="Miniboi/Poly2D.cpp" />
+		<Unit filename="Miniboi/Poly2D.h" />
 		<Unit filename="Miniboi/Polygon3D.cpp" />
 		<Unit filename="Miniboi/Polygon3D.h" />
 		<Unit filename="Miniboi/Polygonrenderer.cpp" />

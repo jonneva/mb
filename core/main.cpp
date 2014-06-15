@@ -18,18 +18,30 @@ uint8_t scrbuffer[504]; // the screen buffer
 Vect2D V1(0,0);
 Vect2D V2(0,10);
 Transform2D TF;
+Poly2D P1;
+
 
 
 void setup() {
     MB.begin(&scrbuffer[0]); // pointer to screen buffer
-    TF.rotateAngleXY(0.5f);
+    TF.rotateAngleXY(0.3f);
+    P1 = Poly2D(
+            Vect2D(-10, -10),
+            Vect2D(10, -10),
+            Vect2D(10, 10),
+            Vect2D(-10, 10));
 }
 
 void loop() {
+    MB.draw_line(-10,10,100,30,1);
     MB.set_pixel(0,0,1);
     MB.set_pixel(V1,1);
     V2.addRotation(TF);
-    MB.set_pixel(V2,1);
+    P1.addRotation(TF);
+    for (int i=0; i<P1.getNumVertices();i++) {
+        MB.set_pixel(MB.convertFromViewXToScreenX(P1[i].x), MB.convertFromViewYToScreenY(P1[i].y),1);
+    }
+    //MB.set_pixel(V2,1);
     MB.delay(100);
     MB.clear_screen();
 }

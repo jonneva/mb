@@ -1406,18 +1406,19 @@
 	"Miniboi_math.h"
 	"Miniboi_trig.h"
 
-1402775784 source:/home/jonne/mb/core/main.cpp
+1402847747 source:/home/jonne/mb/core/main.cpp
 	<SFML/Graphics.hpp>
 	<stdio.h>
 	"Miniboi.h"
 	"Miniboi_emu.h"
 	"Miniboi3D.h"
 
-1402777491 /home/jonne/mb/core/Miniboi/Miniboi.h
+1402847323 /home/jonne/mb/core/Miniboi/Miniboi.h
 	<stdint.h>
 	<stdlib.h>
 	"Miniboi_math.h"
 	"Vect2D.h"
+	"Poly2D.h"
 	"Transform2D.h"
 
 1402648980 /home/jonne/mb/core/Miniboi/Miniboi_math.h
@@ -1489,7 +1490,7 @@
 1402531736 /home/jonne/mb/core/Miniboi/Solidpolygonrenderer.h
 	"Polygonrenderer.h"
 
-1402775632 source:/home/jonne/mb/core/Miniboi/Miniboi.cpp
+1402847661 source:/home/jonne/mb/core/Miniboi/Miniboi.cpp
 	"Miniboi.h"
 	"Miniboi_emu.h"
 
@@ -1566,10 +1567,19 @@
 	<algorithm>
 	"Transform2D.h"
 
-1402775839 /home/jonne/mb/core/Miniboi/Vect2D.h
+1402779136 /home/jonne/mb/core/Miniboi/Vect2D.h
 	<string>
+	<vector>
 	<cmath>
 
 1402771065 /home/jonne/mb/core/Miniboi/Transform2D.h
+	"Vect2D.h"
+
+1402779182 source:/home/jonne/mb/core/Miniboi/Poly2D.cpp
+	"Vect2D.h"
+	"Poly2D.h"
+	"Transform2D.h"
+
+1402822424 /home/jonne/mb/core/Miniboi/Poly2D.h
 	"Vect2D.h"
 

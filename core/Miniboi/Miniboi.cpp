@@ -63,10 +63,70 @@ void Miniboi::set_pixel(Miniboi2D::Vect2D vect, char c) {
 	buffer[(y >> 3) * 84 + x] &= ~(0x80 >> (y & 7));
 }// end of set_pixel
 
-void Miniboi::draw_line(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, char c) {
+void Miniboi::draw_line(int8_t x0, int8_t y0, int8_t x1, int8_t y1, char c) {
     // add smart clipping here !!!!
-	if (x0 > 84 || y0 > 48 || x1 > 84 || y1 > 48)
+	/*if (x0 > 84 || y0 > 48 || x1 > 84 || y1 > 48)
 		return; // this needs to be smarter = allow clipping !
+	*/
+
+if ((uint8_t)x0 > XMAX || (uint8_t)y0 > YMAX || (uint8_t)x1 > XMAX || (uint8_t)y1 > YMAX ) {
+	// Check X bounds
+	if (x1<x0) {
+        std::swap (x1,x0); // swap so that we dont have to check x1 also
+        std::swap (y1,y0); // y needs to be swaaped also
+	}
+
+	if (x0>XMAX) return; // whole line is out of bounds
+
+
+	// Clip against X0 = 0
+	if (x0 < 0) {
+        if ( x1 < 0) return; // nothing visible
+        int dx = (x1 - x0);
+        int dy = ((y1 - y0) << 8); // 8.8 fixed point calculation trick
+        int m = dy/dx;
+        y0 = y0 + ((m*-x0)>>8); // get y0 at boundary
+        x0 = 0;
+	}
+
+	// Clip against x1 = 83
+	if (x1 > XMAX) {
+        int dx = (x1 - x0);
+        int dy = ((y1 - y0) << 8); // 8.8 fixed point calculation trick
+        int m = dy/dx;
+        y1 = y1 + ((m*(x1-XMAX))>>8); // get y0 at boundary
+        x1 = XMAX;
+	}
+
+    // Check Y bounds
+	if (y1<y0) {
+        std::swap (x1,x0); // swap so that we dont have to check x1 also
+        std::swap (y1,y0); // y needs to be swaaped also
+	}
+
+	if (y0>YMAX) return; // whole line is out of bounds
+
+    if (y0 < 0) {
+        if ( y1 < 0) return; // nothing visible
+        int dy = (y1 - y0) << 8;
+        int dx = (x1 - x0); // 8.8 fixed point calculation trick
+        int m = dx/dy;
+        x0 = x0 + ((m*-x0)>>8); // get x0 at boundary
+        y0 = 0;
+	}
+
+
+    // Clip against x1 = 83
+	if (y1 > YMAX) {
+        int dx = (x1 - x0) << 8;
+        int dy = (y1 - y0); // 8.8 fixed point calculation trick
+        int m = dx/dy;
+        x1 = x1 + ((m*(y1-YMAX))>>8); // get y0 at boundary
+        y1 = YMAX;
+	}
+}
+
+
 	if (x0 == x1)
 		draw_column(x0,y0,y1,c);
 	else if (y0 == y1)
