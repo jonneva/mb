@@ -12,7 +12,6 @@
 //#include "polygon3D.h"
 
 using namespace std;
-//using namespace Miniboi2D;
 
 // Constructors
 

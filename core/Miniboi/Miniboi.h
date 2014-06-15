@@ -32,6 +32,8 @@ typedef struct
     mb14 x, y;
 } point2D;
 
+typedef std::vector<point2D> point2DArray;
+
 #define clear_screen()	fill(0)
 
 using namespace Miniboi2D;
@@ -52,7 +54,7 @@ public:
     void draw_column(uint8_t, uint16_t, uint16_t, uint8_t);
     void draw_row(uint8_t, uint16_t, uint16_t, uint8_t);
     void draw_rect(uint8_t,uint8_t,uint8_t,uint8_t,char,char);
-    void draw_poly(uint8_t, point2D*, char, char);
+    void draw_poly(uint8_t, point2DArray&, char, char);
     void draw_poly(Poly2D, char, char);
     int convertFromViewXToScreenX(float x) const { return (int) x + XMAX/2; }
     int convertFromViewYToScreenY(float y) const { return (int)-y + YMAX/2; }

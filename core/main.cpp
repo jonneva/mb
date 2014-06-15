@@ -38,12 +38,13 @@ void loop() {
     MB.set_pixel(V1,1);
     V2.addRotation(TF);
     P1.addRotation(TF);
-    for (int i=0; i<P1.getNumVertices()-1;i++) {
+    //for (int i=0; i<P1.getNumVertices()-1;i++) {
         //MB.set_pixel(MB.convertFromViewXToScreenX(P1[i].x), MB.convertFromViewYToScreenY(P1[i].y),1);
-        MB.draw_line(P1[i],P1[i+1],1);
-    }
-    MB.draw_line(P1[0],P1[P1.getNumVertices()-1],1);
+        //MB.draw_line(P1[i],P1[i+1],1);
+    //}
+    //MB.draw_line(P1[0],P1[P1.getNumVertices()-1],1);
     //MB.set_pixel(V2,1);
+    MB.draw_poly(P1,1,0);
     MB.delay(1);
     MB.clear_screen();
 

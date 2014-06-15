@@ -9,6 +9,7 @@
     b = _t_;    \
 }
 
+point2DArray p2DArray;
 
 // PUBLIC
 char Miniboi::begin(uint8_t* buf) {
@@ -289,7 +290,7 @@ void Miniboi::draw_rect(uint8_t x0, uint8_t y0, uint8_t w, uint8_t h, char c, ch
 	draw_line(x0,y0+h,x0+w,y0+h,c);
 } // end of draw_rect
 
-void Miniboi::draw_poly(uint8_t n, point2D *pnts, char c, char fc){
+void Miniboi::draw_poly(uint8_t n, point2DArray& pnts, char c, char fc){
 // this routine is based on walking the polygon
 // first from left to right, then right to left and
 // storing the y's of the edges along the way into two tables
@@ -299,6 +300,7 @@ void Miniboi::draw_poly(uint8_t n, point2D *pnts, char c, char fc){
 // me to use with Arduino and Nokia 5110 LCD & minimize ram use.
 
     mb14 xmax, xmin; // extremes in 18.14 fixed point accuracy
+
     uint8_t x1, x2;
     uint8_t xminPoint = 0, xmaxPoint = 0; // extremes
     uint8_t p1, p2;
@@ -381,6 +383,18 @@ void Miniboi::draw_poly(uint8_t n, point2D *pnts, char c, char fc){
     }
 };
 
+void Miniboi::draw_poly(Miniboi2D::Poly2D poly, char c, char fc){
+    if (poly.getNumVertices() > 4) fc = -1; //only fill triangles & quads
+    //p2DArray.clear();
+    p2DArray.resize(poly.getNumVertices());
+    for (char i=0; i< poly.getNumVertices(); i++) {
+        point2D p;
+        p.x = float2mb(poly[i].x);
+        p.y = float2mb(poly[i].y);
+        p2DArray[i]=p;
+    }
+    draw_poly(poly.getNumVertices(),p2DArray,c,fc);
+}
 // PRIVATE
 
 void Miniboi::sp(uint8_t x, uint8_t y, char c) {
@@ -409,7 +423,7 @@ int Miniboi::round2Scanline (mb14 n) {
 void Miniboi::walkEdge(uint8_t *edgeTable, point2D *p1, point2D *p2)
 {
     mb14 y, dy;
-    int dx, x1, x2;
+    int dx, x1, x2,temp;
 
     // make sure p1 of edge is leftmost
     if (p2->x < p1->x) swapWT(point2D *, p1, p2);
@@ -427,6 +441,9 @@ void Miniboi::walkEdge(uint8_t *edgeTable, point2D *p1, point2D *p2)
     dy = mbDiv((p2->y - p1->y), int2mb(dx)); // y increment for walk
 
     do {
+        temp = mb2int(y);
+        if (temp < 0) temp = 0; //check bounds
+        else if (temp > YMAX) temp =YMAX; //check bounds
         edgeTable[x1] = mb2int(y);   // store current edge y at index x in table
         y += dy;        // increment y by defined step
         x1++;           // step rightward
