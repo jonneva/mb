@@ -48,6 +48,7 @@ public:
 	void set_pixel(uint8_t,uint8_t,char);
     void set_pixel(Vect2D,char);
 	void draw_line(int8_t,int8_t, int8_t, int8_t, char);
+	void draw_line(Vect2D,Vect2D,char);
     void draw_column(uint8_t, uint16_t, uint16_t, uint8_t);
     void draw_row(uint8_t, uint16_t, uint16_t, uint8_t);
     void draw_rect(uint8_t,uint8_t,uint8_t,uint8_t,char,char);
@@ -60,6 +61,7 @@ private:
     void sp(uint8_t,uint8_t,char);
     int  round2Scanline(mb14);
     void walkEdge(uint8_t *, point2D *, point2D *);
+    char clipLine(int8_t*, int8_t*, int8_t*, int8_t*);
 };
 
 extern Miniboi MB; // until i get rid of Quokka 3d heritage

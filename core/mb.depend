@@ -1406,14 +1406,14 @@
 	"Miniboi_math.h"
 	"Miniboi_trig.h"
 
-1402847747 source:/home/jonne/mb/core/main.cpp
+1402850729 source:/home/jonne/mb/core/main.cpp
 	<SFML/Graphics.hpp>
 	<stdio.h>
 	"Miniboi.h"
 	"Miniboi_emu.h"
 	"Miniboi3D.h"
 
-1402847323 /home/jonne/mb/core/Miniboi/Miniboi.h
+1402849288 /home/jonne/mb/core/Miniboi/Miniboi.h
 	<stdint.h>
 	<stdlib.h>
 	"Miniboi_math.h"
@@ -1427,7 +1427,7 @@
 1402651982 /home/jonne/mb/core/Miniboi/Miniboi_trig.h
 	"Miniboi_math.h"
 
-1402667252 /home/jonne/mb/core/Miniboi/Miniboi_emu.h
+1402850702 /home/jonne/mb/core/Miniboi/Miniboi_emu.h
 	<SFML/Graphics.hpp>
 	<stdint.h>
 	<stdlib.h>
@@ -1490,11 +1490,11 @@
 1402531736 /home/jonne/mb/core/Miniboi/Solidpolygonrenderer.h
 	"Polygonrenderer.h"
 
-1402847661 source:/home/jonne/mb/core/Miniboi/Miniboi.cpp
+1402849516 source:/home/jonne/mb/core/Miniboi/Miniboi.cpp
 	"Miniboi.h"
 	"Miniboi_emu.h"
 
-1402667127 source:/home/jonne/mb/core/Miniboi/Miniboi_emu.cpp
+1402849822 source:/home/jonne/mb/core/Miniboi/Miniboi_emu.cpp
 	<SFML/Graphics.hpp>
 	"Miniboi_emu.h"
 
