@@ -96,7 +96,7 @@ void Miniboi_emu::start()
 
 void Miniboi_emu::refresh_old(uint8_t * screen){
     emuWindow.setView(emuScreen);
-    emuWindow.clear(color0);
+    //emuWindow.clear(color0);
 
     int x=0, y=0;
     for (uint16_t byteptr=0; byteptr < 504; byteptr++) {

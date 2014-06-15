@@ -24,7 +24,7 @@ Poly2D P1;
 
 void setup() {
     MB.begin(&scrbuffer[0]); // pointer to screen buffer
-    TF.rotateAngleXY(0.01f);
+    TF.rotateAngleXY(0.1f);
     P1 = Poly2D(
             Vect2D(-21, -21),
             Vect2D(21, -21),
@@ -44,13 +44,9 @@ void loop() {
     }
     MB.draw_line(P1[0],P1[P1.getNumVertices()-1],1);
     //MB.set_pixel(V2,1);
-    MB.delay(10);
-    //MB.clear_screen();
-    for (int i=0; i<P1.getNumVertices()-1;i++) {
-        //MB.set_pixel(MB.convertFromViewXToScreenX(P1[i].x), MB.convertFromViewYToScreenY(P1[i].y),1);
-        MB.draw_line(P1[i],P1[i+1],0);
-    }
-    MB.draw_line(P1[0],P1[P1.getNumVertices()-1],0);
+    MB.delay(1);
+    MB.clear_screen();
+
 }
 
 
@@ -64,7 +60,7 @@ int main()
 while (emuWindow.isOpen())
     {
 	loop();
-	EMU.refresh(&scrbuffer[0]); // pointer to buffer
+	//EMU.refresh(&scrbuffer[0]); // pointer to buffer
     }
 	return 0;
 }
