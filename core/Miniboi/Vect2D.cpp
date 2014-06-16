@@ -19,7 +19,7 @@ namespace Miniboi2D {
 
 Vect2D::Vect2D() { x = y = 0.0f; }
 
-Vect2D::Vect2D(float x1, float y1) : x(x1), y(y1) {}
+Vect2D::Vect2D(mb88 x1, mb88 y1) : x(x1), y(y1) {}
 
 // Vector addition
 Vect2D& Vect2D::operator += (const Vect2D& v)
@@ -38,7 +38,7 @@ Vect2D& Vect2D::operator -= (const Vect2D& v)
     return *this; // returns the original reference
 }
 
-Vect2D& Vect2D::operator *= (float k)
+Vect2D& Vect2D::operator *= (mb88 k)
 {
     x *= k;
     y *= k;
@@ -46,7 +46,7 @@ Vect2D& Vect2D::operator *= (float k)
     return *this;
 }
 
-Vect2D& Vect2D::operator /= (float k)
+Vect2D& Vect2D::operator /= (mb88 k)
 {
     assert(k > FLT_EPSILON);     // check for divide-by-zero
 
@@ -75,7 +75,7 @@ string Vect2D::toString() const
 {
     ostringstream ostr;
 
-    ostr << fixed << "(" << x << ", " << y << ")" << endl;
+    ostr << fixed << "(" << mb882float(x) << ", " << mb882float(y) << ")" << endl;
     return ostr.str();
 }
 
@@ -83,9 +83,9 @@ string Vect2D::toString() const
 /**
     Rotate this vector in XY plane
 */
-void Vect2D::rotateXY(float cosAngle, float sinAngle) {
-    float newX = x*cosAngle - y*sinAngle;
-    float newY = x*sinAngle + y*cosAngle;
+void Vect2D::rotateXY(mb88 cosAngle, mb88 sinAngle) {
+    mb88 newX = x*cosAngle - y*sinAngle;
+    mb88 newY = x*sinAngle + y*cosAngle;
     x = newX;
     y = newY;
 }

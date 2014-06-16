@@ -5,45 +5,12 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include "mb88.h"
 //#include <limits>
-
 
 #define FLT_EPSILON 1.19209290E-07F // decimal constant
 #define PI 3.14159265
 
-/* OPERATOR OVERLOADS */
-/*
-template<typename T>
-const T operator+(const T& lhs, const T& rhs)
-{
-    return T(lhs) += rhs;
-}
-
-template<typename T>
-const T operator-(const T& lhs, const T& rhs)
-{
-    return T(lhs) -= rhs;
-}
-
-template<typename T>
-const T operator/(const T& lhs, float rhs)
-{
-    if (rhs==0) return 0;
-    return T(lhs) /= rhs;
-}
-
-template<typename T>
-const T operator*(const T& lhs, float rhs)
-{
-    return T(lhs) *= rhs;
-}
-
-template<typename T>
-const T operator*(float lhs, const T& rhs)
-{
-    return T(rhs) *= lhs;
-}
-*/
 namespace Miniboi2D
 {
     class Transform2D; // Forward declaration
@@ -66,18 +33,17 @@ namespace Miniboi2D
     class Vect2D
     {
     public:
-        float x;
-        float y;
+        mb88 x;
+        mb88 y;
 
         Vect2D();
-
-        Vect2D(float x, float y);
+        Vect2D(mb88 x, mb88 y);
 
         // assignment operators
         Vect2D& operator += (const Vect2D&);
         Vect2D& operator -= (const Vect2D&);
-        Vect2D& operator *= (float);
-        Vect2D& operator /= (float);
+        Vect2D& operator *= (mb88);
+        Vect2D& operator /= (mb88);
 
         // equality operators
         bool operator == (const Vect2D&) const;
@@ -85,9 +51,9 @@ namespace Miniboi2D
 
         std::string toString() const;
 
-        float length() const;
+        mb88 length() const;
         void  normalize();
-        float dot(const Vect2D&) const;
+        mb88 dot(const Vect2D&) const;
         void  cross(const Vect2D&, const Vect2D&);
 
         void add(Transform2D&); // & means passing a reference as variable
@@ -96,14 +62,14 @@ namespace Miniboi2D
         void subtractRotation(Transform2D&); // in a safer way than a pointer
 
     private:
-        void rotateXY(float,float);
+        void rotateXY(mb88,mb88);
 
     };  // Vect2D
 
 
 /* INLINE FUNCTIONS */
 
-    inline float Vect2D::length() const
+    inline mb88 Vect2D::length() const
     {
         return sqrt(x*x + y*y);
     }
@@ -113,7 +79,7 @@ namespace Miniboi2D
         *this /= length();
     }
 
-    inline float Vect2D::dot(const Vect2D& v) const
+    inline mb88 Vect2D::dot(const Vect2D& v) const
     {
         return x*v.x + y*v.y;
     }
