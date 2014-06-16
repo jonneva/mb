@@ -26,6 +26,14 @@
 
 #define XMAX    83
 #define YMAX    47
+#define XMAX2D  1359872 // 83<<14
+#define YMAX2D  770048  // 47<<14
+
+
+typedef struct
+{
+    uint8_t x, y; // screen xy coordinates
+} pointXY;
 
 typedef struct
 {
@@ -33,6 +41,7 @@ typedef struct
 } point2D;
 
 typedef std::vector<point2D> point2DArray;
+typedef std::vector<pointXY> pointXYArray; // display clipped xy's
 
 #define clear_screen()	fill(0)
 
@@ -64,6 +73,8 @@ private:
     int  round2Scanline(mb14);
     void walkEdge(uint8_t *, point2D *, point2D *);
     char clipLine(int8_t*, int8_t*, int8_t*, int8_t*);
+    char clipLine(point2D*, point2D*, point2D*, point2D*);
+    char clipPoly(char, point2DArray&);
 };
 
 extern Miniboi MB; // until i get rid of Quokka 3d heritage

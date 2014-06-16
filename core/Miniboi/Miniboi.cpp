@@ -10,6 +10,7 @@
 }
 
 point2DArray p2DArray;
+pointXYArray pXYArray;
 
 // PUBLIC
 char Miniboi::begin(uint8_t* buf) {
@@ -204,7 +205,7 @@ void Miniboi::draw_column(uint8_t x, uint16_t y0, uint16_t y1, uint8_t c) {
 		} // swap the ys correct way round
 
     if (y0 == y1)
-		sp(x,y0,c); // draw pixel if length = 1
+		set_pixel(x,y0,c); // draw pixel if length = 1
 
     switch (c) {
     case HATCH:
@@ -291,16 +292,10 @@ void Miniboi::draw_rect(uint8_t x0, uint8_t y0, uint8_t w, uint8_t h, char c, ch
 } // end of draw_rect
 
 void Miniboi::draw_poly(uint8_t n, point2DArray& pnts, char c, char fc){
-// this routine is based on walking the polygon
-// first from left to right, then right to left and
-// storing the y's of the edges along the way into two tables
-// the tables are then used to draw columns that fill the polygon
-// Based on article by Robert C. Pendleton at
-// http://www.gameprogrammer.com/5-poly.html but modified by
-// me to use with Arduino and Nokia 5110 LCD & minimize ram use.
 
     mb14 xmax, xmin; // extremes in 18.14 fixed point accuracy
-
+    int temp;
+    float t2;
     uint8_t x1, x2;
     uint8_t xminPoint = 0, xmaxPoint = 0; // extremes
     uint8_t p1, p2;
@@ -311,6 +306,8 @@ void Miniboi::draw_poly(uint8_t n, point2DArray& pnts, char c, char fc){
     if (fc != -1) { // if fillcolor is set
 
     xmax = xmin = pnts[0].x; // initialize to point 0 of polygon
+    temp = mb2int(xmax);
+    t2 = mb2float(xmax);
 
     // FIND EXTREMES
     for (i = 1; i < n; i++)   // iterate through points of polygon
@@ -389,12 +386,13 @@ void Miniboi::draw_poly(Miniboi2D::Poly2D poly, char c, char fc){
     p2DArray.resize(poly.getNumVertices());
     for (char i=0; i< poly.getNumVertices(); i++) {
         point2D p;
-        p.x = float2mb(poly[i].x);
-        p.y = float2mb(poly[i].y);
+        p.x = int2mb(convertFromViewXToScreenX(poly[i].x));
+        p.y = int2mb(convertFromViewYToScreenY(poly[i].y));
         p2DArray[i]=p;
     }
     draw_poly(poly.getNumVertices(),p2DArray,c,fc);
 }
+
 // PRIVATE
 
 void Miniboi::sp(uint8_t x, uint8_t y, char c) {
@@ -506,4 +504,72 @@ char Miniboi::clipLine(int8_t *x0, int8_t *y0, int8_t *x1, int8_t *y1)
         *y1 = YMAX;
 	}
 	return 1; // clipped succesfully
+}
+
+char Miniboi::clipLine(point2D *p0, point2D *p1, point2D *newp0, point2D *newp1)
+{
+    // Clipline (point2D,point2D)
+    // clips mb14 values against window boundaries
+    // returns 0 if not clipped, 1 if clipped.
+    // Check X bounds
+
+    if (p0->x >= 0 && p0->x <= XMAX2D && p0->y >= 0 && p0->y <= YMAX2D && p1->x >= 0 && p1->x <= XMAX2D && p1->y >= 0 && p1->y <= YMAX2D)
+    return 0; // is within window, no need to clip
+
+	if (p1->x < p0->x) {
+        std::swap (*p1,*p0); // swap so that we dont have to check x1 also
+	}
+
+	if (p0->x>XMAX2D) return 0; // whole line is out of bounds
+
+    // calculate gradient
+    mb14 dx = mbSub(p1->x,p0->x);
+    mb14 dy = mbSub(p1->y,p0->y);
+    mb14 m = mbDiv(dy,dx);
+
+	// Clip against X0 = 0
+	if (p0->x < 0) {
+        if ( p1->x < 0) return 0; // nothing visible
+        p0->y = mbAdd(p0->y,mbMul(m,-p0->x)); // get y0 at boundary
+        p0->x = 0;
+	}
+
+	// Clip against x1 = 83
+	if (p1->x > XMAX2D) {
+        p1->y = mbAdd(p1->y,mbMul(m,mbSub(p1->x,XMAX2D)));
+        p1->x = XMAX2D;
+	}
+
+    // Check Y bounds
+	if (p1->y<p0->y) {
+        std::swap (*p1,*p0); // swap so that we dont have to check x1 also
+	}
+
+	if (p0->y>YMAX2D) return 0; // whole line is out of bounds
+
+    dx = mbSub(p1->x,p0->x);
+    dy = mbSub(p1->y,p0->y);
+    m = mbDiv(dx,dy);
+
+    if (p0->y < 0) {
+        if ( p1->y < 0) return 0; // nothing visible
+        p0->x = mbAdd(p0->x,mbMul(m,-p0->y)); // get y0 at boundary
+        p0->y = 0;
+	}
+
+    // Clip against y1 = 47
+	if (p1->y > YMAX2D) {
+        //p1->x = mbAdd(p1->x,mbMul(m,mbSub(YMAX2D,p1->y)));
+        p1->y = YMAX2D;
+	}
+	return 1; // clipped succesfully
+}
+
+// clip polygon to window boundaries
+char Miniboi::clipPoly(char n, point2DArray& pnts)
+{
+    // clipPoly clips polygon edges with window edges
+    for (char i = 0; i<n; i++) {
+
+    }
 }

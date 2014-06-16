@@ -26,10 +26,10 @@ void setup() {
     MB.begin(&scrbuffer[0]); // pointer to screen buffer
     TF.rotateAngleXY(0.1f);
     P1 = Poly2D(
-            Vect2D(-21, -21),
-            Vect2D(21, -21),
-            Vect2D(21, 21),
-            Vect2D(-21, 21));
+            Vect2D(-10, -10),
+            Vect2D(10, -10),
+            Vect2D(10, 10),
+            Vect2D(-10, 10));
 }
 
 void loop() {
@@ -37,7 +37,7 @@ void loop() {
     MB.set_pixel(0,0,1);
     MB.set_pixel(V1,1);
     V2.addRotation(TF);
-    P1.addRotation(TF);
+    //P1.addRotation(TF);
     //for (int i=0; i<P1.getNumVertices()-1;i++) {
         //MB.set_pixel(MB.convertFromViewXToScreenX(P1[i].x), MB.convertFromViewYToScreenY(P1[i].y),1);
         //MB.draw_line(P1[i],P1[i+1],1);
