@@ -31,6 +31,14 @@ void setup() {
             Vect2D(10, -10),
             Vect2D(10, 10),
             Vect2D(-10, 10));
+    mb88 test1 = 20;
+    mb88 test2 = 6;
+    mb88 test3 = test1/test2;
+    int result; float fresult;
+    result = mb882int(test3);
+    fresult = mb882float(test3);
+    fresult++;
+    result++;
 }
 
 void loop() {

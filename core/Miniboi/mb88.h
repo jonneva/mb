@@ -14,10 +14,6 @@ inline int16_t mb88div(int16_t a, int16_t b)
 	return (int16_t)((((int32_t)a) << 8) / b);
 }
 
-inline float mb882float(int16_t f)
-{
-	return (float)f / (1 << 8);
-}
 
 inline int16_t float2mb88(float f)
 {
@@ -28,10 +24,10 @@ struct mb88 {
 	int16_t intValue;
 	mb88() {}
 	// explicit casting different types
-	mb88(uint8_t i) : intValue(i << 8) {}
-	mb88(int8_t i) : intValue(i * 0xFF) {}
-	mb88(uint16_t i) : intValue(i << 8) {}
-	mb88(int16_t i) : intValue(i * 0xFF) {}
+	//mb88(uint8_t i) : intValue(i << 8) {}
+	mb88(int i) : intValue(i * 256) {}
+	//mb88(uint16_t i) : intValue(i << 8) {}
+	//mb88(int16_t i) : intValue(i * 256) {}
 	mb88(float f) : intValue(float2mb88(f)) {}
 
 	mb88& operator += (mb88 r) { intValue += r.intValue; return *this; }
@@ -66,13 +62,13 @@ struct mb88 {
 inline mb88 operator + (int8_t a, mb88 b)
 { return b + mb88(a); }
 inline mb88 operator + (int16_t a, mb88 b)
-{ return b + a * 0xFF; } // Discards high 8 bits !
+{ return b + a * 256; } // Discards high 8 bits !
 
 
 inline mb88 operator - (int8_t a, mb88 b)
 { return -b + a; }
 inline mb88 operator - (int16_t a, mb88 b)
-{ return -b + a * 0xFF; }
+{ return -b + a * 256; }
 
 
 inline mb88 operator * (int8_t a, mb88 b)
@@ -125,6 +121,10 @@ inline uint8_t mb88fract (mb88 a)
     return a.intValue & 0xFF;
 }
 
+inline float mb882float(mb88 f)
+{
+	return (float) f.intValue / (1 << 8);
+}
 
 #endif // MB88_H
 

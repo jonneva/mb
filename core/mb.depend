@@ -1406,7 +1406,7 @@
 	"Miniboi_math.h"
 	"Miniboi_trig.h"
 
-1402919673 source:/home/jonne/mb/core/main.cpp
+1402923381 source:/home/jonne/mb/core/main.cpp
 	<SFML/Graphics.hpp>
 	<stdio.h>
 	"Miniboi.h"
@@ -1584,7 +1584,7 @@
 1402822424 /home/jonne/mb/core/Miniboi/Poly2D.h
 	"Vect2D.h"
 
-1402920625 /home/jonne/mb/core/Miniboi/mb88.h
+1402923219 /home/jonne/mb/core/Miniboi/mb88.h
 	<string>
 	<cmath>
 

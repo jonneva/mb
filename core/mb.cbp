@@ -74,6 +74,8 @@
 		<Unit filename="Miniboi/ViewWindow.cpp" />
 		<Unit filename="Miniboi/ViewWindow.h" />
 		<Unit filename="Miniboi/binary.h" />
+		<Unit filename="Miniboi/mb88.h" />
+		<Unit filename="Miniboi/plan.txt" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
