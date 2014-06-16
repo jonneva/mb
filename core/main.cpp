@@ -4,6 +4,7 @@
 #include "Miniboi.h"
 #include "Miniboi_emu.h"
 #include "Miniboi3D.h"
+#include "mb88.h"
 
 Miniboi_emu EMU;
 
