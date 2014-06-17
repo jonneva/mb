@@ -74,8 +74,12 @@ namespace Miniboi2D
     {
         //m_cosAngleXY = cos(angleXY);
         //m_sinAngleXY = sin(angleXY);
-        m_cosAngleXY = fxpcos(angleXY);
-        m_sinAngleXY = fxpsin(angleXY);
+        int angleDeg;
+        angleXY *= 180;
+        angleXY /= PI88;
+        angleDeg = mb882int(angleXY);
+        m_cosAngleXY = fxpcos(angleDeg);
+        m_sinAngleXY = fxpsin(angleDeg);
     }
 
     inline void Transform2D::setAngle(mb88 angleXY)
@@ -86,7 +90,7 @@ namespace Miniboi2D
 
     inline void Transform2D::rotateAngleXY(mb88 angle)
     {
-        if (!float_equals(mb882float(angle), 0.0f))
+        //if (!float_equals(mb882float(angle), 0.0f))
             setAngleXY(getAngleXY() + angle);
     }
 
