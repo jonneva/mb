@@ -25,7 +25,7 @@ Poly2D P1;
 
 void setup() {
     MB.begin(&scrbuffer[0]); // pointer to screen buffer
-    TF.rotateAngleXY(0.1f);
+    TF.rotateAngleXY((float)PI/4);
     P1 = Poly2D(
             Vect2D(-10, -10),
             Vect2D(10, -10),
@@ -53,7 +53,7 @@ void loop() {
     //MB.draw_line(P1[0],P1[P1.getNumVertices()-1],1);
     //MB.set_pixel(V2,1);
     //MB.draw_poly(P1,1,0);
-    MB.delay(1);
+    MB.delay(100);
     MB.clear_screen();
 
 }
