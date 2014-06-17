@@ -143,7 +143,7 @@ inline float mb882float(mb88 f)
 
 inline mb88 sqrt(mb88 a)
 {
-    int16_t s;
+    int32_t a0,x;
     int i;
     /* intvalue is incremented by 256 */
     /* then divided by 2
@@ -154,11 +154,16 @@ inline mb88 sqrt(mb88 a)
         s = (s + 4096/s)/2; six times
     THIS IS THE BABYLONIAN METHOD !
     */
-    s = (a.intValue + (1<<8)) >> 1;
-    /* 7 iterations to converge */
-    for (i = 0; i < 7; i++)
-		s = (s + (a.intValue/s)) >> 1;
-    a.intValue = s*16; // to get mb88 answer
+    a0 = (int32_t) a.intValue << 8; // for more accuracy
+    x = a0 + a.intValue;
+    x >>= 1; // x is initial guess
+    //x = (a.intValue + (1<<16)) >> 1; // original 16 bit version
+    /* 10 iterations to converge */
+    for (i = 0; i < 10; i++)
+		x = (x + (a0/x)) >> 1;
+    //a.intValue = s*16; // to get mb88 answer
+    //x /= 16;
+    a.intValue = (int16_t)x; // to get mb88 answer
     return a;
 }
 

@@ -34,7 +34,7 @@ void setup() {
     mb88 test1, test2,test3; float result;
     test1=103.5f;
     test2=12.7f;
-    test3=16;
+    test3=2.0f;
     test3=sqrt(test3);
     result = mb882float(test3);
     test3+=1;
