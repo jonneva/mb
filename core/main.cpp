@@ -41,9 +41,9 @@ void setup() {
 }
 
 void loop() {
-    MB.draw_line(-10,10,100,30,1);
-    MB.set_pixel(0,0,1);
-    MB.set_pixel(V1,1);
+    MB.draw_line(V1,V2,1);
+    //MB.set_pixel(0,0,1);
+    //MB.set_pixel(V2,1);
     V2.addRotation(TF);
     //P1.addRotation(TF);
     //for (int i=0; i<P1.getNumVertices()-1;i++) {
@@ -52,7 +52,7 @@ void loop() {
     //}
     //MB.draw_line(P1[0],P1[P1.getNumVertices()-1],1);
     //MB.set_pixel(V2,1);
-    MB.draw_poly(P1,1,0);
+    //MB.draw_poly(P1,1,0);
     MB.delay(1);
     MB.clear_screen();
 

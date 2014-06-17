@@ -74,10 +74,10 @@ namespace Miniboi2D
     {
         //m_cosAngleXY = cos(angleXY);
         //m_sinAngleXY = sin(angleXY);
-        int angleDeg;
-        angleXY *= 180;
-        angleXY /= PI88;
-        angleDeg = mb882int(angleXY);
+        int angleDeg; int32_t accAngle; // needed to prevent overflow
+        accAngle = angleXY.intValue * 180;
+        accAngle /= PI88;
+        angleDeg = mb882int((int16_t)accAngle);
         m_cosAngleXY = fxpcos(angleDeg);
         m_sinAngleXY = fxpsin(angleDeg);
     }

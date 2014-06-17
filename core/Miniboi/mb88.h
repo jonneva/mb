@@ -276,7 +276,7 @@ static const int16_t sin_tab[] = {
     l = table length
 */
 
-inline mb88 fxpsin (int angle) {
+inline mb88 fxpsin (int16_t angle) {
     // angle comes in as an signed degree integer
     mb88 a;int16_t index;
     if (angle >= 360) angle %= 360; // put angle in 0-360 range
@@ -300,8 +300,29 @@ inline mb88 fxpsin (int angle) {
     return a;
 }
 
-inline mb88 fxpcos (mb88 angle) {
+inline mb88 fxpcos (int16_t angle) {
+    // angle comes in as an signed degree integer
+    mb88 a;int16_t index;
+    if (angle >= 360) angle %= 360; // put angle in 0-360 range
+    index = angle % 90; // put index in 1st quadrant
+    // if angle = 90, index becomes 0
+    if (angle == 0) return 1;
+    if (angle == 90) return 0;
+    if (angle == 180) return -1;
+    if (angle == 270) return 0;
 
+    if (angle < 90) {
+        a.intValue = sin_tab[90-index] >> 7;
+        return a;
+    } else if (angle < 180) {
+        a.intValue = -sin_tab[index] >> 7 ;
+        return a;
+    } else if (angle < 270) {
+        a.intValue = -sin_tab[90-index] >> 7 ;
+        return a;
+    }
+    a.intValue = sin_tab[index] >> 7 ;
+    return a;
 }
 
 
