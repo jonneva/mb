@@ -71,7 +71,18 @@ namespace Miniboi2D
 
     inline mb88 Vect2D::length() const
     {
-        return sqrt(x*x + y*y);
+        // return sqrt(x*x + y*y); // the original formula
+        // i need to make these 32-bit to be able to hold the bigger
+        // values
+        mb88 l;
+        uint32_t x32 = x.intValue;
+        uint32_t y32 = y.intValue;
+        x32 *= x32;
+        y32 *= y32;
+        x32 += y32;
+        x32 = sqrt(x32);
+        l.intValue = (uint16_t)x32;
+        return l;
     }
 
     inline void Vect2D::normalize()

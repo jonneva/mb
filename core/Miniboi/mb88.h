@@ -4,6 +4,11 @@
 #include <string>
 #include <cmath>
 
+// 0x4000 brad = π rad = 180 degrees
+static const uint BRAD_PI_SHIFT=14,   BRAD_PI = 1<<BRAD_PI_SHIFT;
+static const uint BRAD_HPI= BRAD_PI/2, BRAD_2PI= BRAD_PI*2;
+static const uint ATAN_ONE = 0x1000, ATAN_FP= 12;
+//See more at: http://www.coranac.com/documents/arctangent/
 
 
 inline int16_t mb88mul(int16_t a, int16_t b)
@@ -18,9 +23,8 @@ inline int16_t mb88div(int16_t a, int16_t b)
 
 
 
-
 #define PI88 804
-#define FLT_EPSILON float2mb88(1.19209290E-07F)
+#define FLT_EPSILON88 float2mb88(1.19209290E-07F)
 
 
 
@@ -141,9 +145,9 @@ inline float mb882float(mb88 f)
 	return (float) f.intValue / (1 << 8);
 }
 
-inline mb88 sqrt(mb88 a)
+inline uint32_t sqrt(uint32_t a)
 {
-    int32_t a0,x;
+    int32_t x;
     int i;
     /* intvalue is incremented by 256 */
     /* then divided by 2
@@ -154,16 +158,27 @@ inline mb88 sqrt(mb88 a)
         s = (s + 4096/s)/2; six times
     THIS IS THE BABYLONIAN METHOD !
     */
-    a0 = (int32_t) a.intValue << 8; // for more accuracy
-    x = a0 + a.intValue;
+    //a0 = (int32_t) a.intValue << 8; // for more accuracy
+    x = a + (1<<16);
     x >>= 1; // x is initial guess
     //x = (a.intValue + (1<<16)) >> 1; // original 16 bit version
     /* 10 iterations to converge */
     for (i = 0; i < 10; i++)
-		x = (x + (a0/x)) >> 1;
+		x = (x + (a/x)) >> 1;
     //a.intValue = s*16; // to get mb88 answer
     //x /= 16;
-    a.intValue = (int16_t)x; // to get mb88 answer
+    //a.intValue = (int16_t)x; // to get mb88 answer
+    return x;
+}
+
+inline mb88 sqrt(mb88 a)
+{
+    int32_t x;
+    int i;
+    x = (a.intValue+256) >> 1; // original 16 bit version
+    for (i = 0; i < 6; i++)
+		x = (x + (a.intValue/x)) >> 1; /* 8 iterations to converge */
+    a.intValue = (int16_t)x * 16; // to get mb88 answer
     return a;
 }
 
@@ -279,7 +294,9 @@ static const int16_t sin_tab[] = {
 inline mb88 fxpsin (int16_t angle) {
     // angle comes in as an signed degree integer
     mb88 a;int16_t index;
-    if (angle >= 360) angle %= 360; // put angle in 0-360 range
+    angle %= 360;
+    if (angle<0) angle += 360;
+    //if (angle >= 360) angle %= 360; // put angle in 0-360 range
     index = angle % 90; // put index in 1st quadrant
     // if angle = 90, index becomes 0
     if (angle == 90) return 1;
@@ -303,7 +320,9 @@ inline mb88 fxpsin (int16_t angle) {
 inline mb88 fxpcos (int16_t angle) {
     // angle comes in as an signed degree integer
     mb88 a;int16_t index;
-    if (angle >= 360) angle %= 360; // put angle in 0-360 range
+    angle %= 360;
+    if (angle<0) angle += 360;
+    //if (angle >= 360) angle %= 360; // put angle in 0-360 range
     index = angle % 90; // put index in 1st quadrant
     // if angle = 90, index becomes 0
     if (angle == 0) return 1;
@@ -325,6 +344,56 @@ inline mb88 fxpcos (int16_t angle) {
     return a;
 }
 
+
+// Get the octant a coordinate pair is in.
+#define OCTANTIFY(_x, _y, _o)   do {                            \
+    int _t; _o= 0;                                              \
+    if(_y<  0)  {            _x= -_x;   _y= -_y; _o += 4; }     \
+    if(_x<= 0)  { _t= _x;    _x=  _y;   _y= -_t; _o += 2; }     \
+    if(_x<=_y)  { _t= _y-_x; _x= _x+_y; _y=  _t; _o += 1; }     \
+    } while(0);
+
+// QDIV stands for the fixed-point division method most appropriate for
+// your system. Modify where appropriate.
+// This would be for NDS.
+
+
+static inline int QDIV(int32_t num, int16_t den, const int bits) {
+    //while(REG_DIVCNT & DIV_BUSY);
+    //REG_DIVCNT = DIV_64_32;
+    //REG_DIV_NUMER = ((int64)num)<<bits;
+    //REG_DIV_DENOM_L = den;
+    //while(REG_DIVCNT & DIV_BUSY);
+    //return (REG_DIV_RESULT_L);
+    num <<= bits;
+    num = num / den;
+    return (int16_t) num;
+}
+
+
+
+// Approximate Taylor series for atan2, home-grown implementation.
+// Returns [0,2pi), where pi ~ 0x4000.
+//See more at: http://www.coranac.com/documents/arctangent/
+
+inline uint16_t atan2Tonc(int x, int y) {
+    if(y==0)    return (x>=0 ? 0 : BRAD_PI);
+    static const int fixShift= 15;
+    int  phi, t, t2, dphi;
+    OCTANTIFY(x, y, phi);
+    phi *= BRAD_PI/4;
+    t= QDIV(y, x, fixShift);
+    t2= -t*t>>fixShift;
+    dphi= 0x0470;
+    dphi= 0x1029 + (t2*dphi>>fixShift);
+    dphi= 0x1F0B + (t2*dphi>>fixShift);
+    dphi= 0x364C + (t2*dphi>>fixShift);
+    dphi= 0xA2FC + (t2*dphi>>fixShift);
+    dphi= dphi*t>>fixShift;
+    return phi + ((dphi+4)>>3);
+}
+//See more at:
+// http://www.coranac.com/documents/arctangent/#sthash.nDY5rqE1.dpuf
 
 
 
