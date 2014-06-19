@@ -149,25 +149,11 @@ inline uint32_t sqrt(uint32_t a)
 {
     int32_t x;
     int i;
-    /* intvalue is incremented by 256 */
-    /* then divided by 2
-    for example n = 16 is 4096 in mb88 notation
-    then add 256, gives 4352
-    then divided by 2 to s = 2176
-    then an iterative loop
-        s = (s + 4096/s)/2; six times
-    THIS IS THE BABYLONIAN METHOD !
-    */
-    //a0 = (int32_t) a.intValue << 8; // for more accuracy
-    x = a + (1<<16);
-    x >>= 1; // x is initial guess
-    //x = (a.intValue + (1<<16)) >> 1; // original 16 bit version
-    /* 10 iterations to converge */
+    /* THIS IS THE BABYLONIAN METHOD !*/
+    x = a + (1<<16); // x = a + 256*256
+    x >>= 8; // x is initial guess
     for (i = 0; i < 10; i++)
 		x = (x + (a/x)) >> 1;
-    //a.intValue = s*16; // to get mb88 answer
-    //x /= 16;
-    //a.intValue = (int16_t)x; // to get mb88 answer
     return x;
 }
 
