@@ -85,10 +85,10 @@ string Vect2D::toString() const
     Rotate this vector in XY plane
 */
 void Vect2D::rotateXY(mb14 cosAngle, mb14 sinAngle) {
-    mb14 newX = mb88to14(x);
-    mb14 newY = mb88to14(y);
-    x = mb14to88(newX*cosAngle - newY*sinAngle);
-    y = mb14to88(newX*sinAngle + newY*cosAngle);
+    mb14 newX = x.intValue; // a 16-bit value
+    mb14 newY = y.intValue;
+    x = mb14to88((newX*cosAngle - newY*sinAngle)>>8);
+    y = mb14to88((newX*sinAngle + newY*cosAngle)>>8);
 }
 
 

@@ -81,7 +81,7 @@ namespace Miniboi2D
         accAngle = angleXY * 180; // 32 bits should be enuff
         //accAngle /= PI88;
         accAngle /= PI14;
-        angleDeg = mb2int((int16_t)accAngle);
+        angleDeg = accAngle; // the conversion is included in PI14 !
         m_cosAngleXY = fxpcos(angleDeg);
         m_sinAngleXY = fxpsin(angleDeg);
     }
@@ -97,7 +97,7 @@ namespace Miniboi2D
         // this was first float, then mb88, but mb88 is not nearly
         // accurate enough
         //if (!float_equals(mb882float(angle), 0.0f))
-            setAngleXY(getAngleXY() + angle);
+            setAngleXY(float2mb(getAngleXY()) + angle);
     }
 
     inline void Transform2D::rotateAngle(mb14 angleXY)

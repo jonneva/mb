@@ -45,7 +45,7 @@ void setup() {
     myfile << "Rotation angle in radians: ";
     myfile << mb882float(testangle) << "\n";
     MB.begin(&scrbuffer[0]); // pointer to screen buffer
-    TF.rotateAngleXY(rotangle);
+    TF.rotateAngleXY(float2mb(rotangle));
     //myfile << "Rotation angle: " << rotangle << "  \n";
     P1 = Poly2D(
             Vect2D(-10, -10),
