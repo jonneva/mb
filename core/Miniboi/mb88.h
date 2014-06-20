@@ -162,6 +162,7 @@ inline uint32_t sqrt(uint32_t a)
 {
     int32_t x;
     int i;
+    if (a==0) return 0;
     /* THIS IS THE BABYLONIAN METHOD !*/
     x = a + (1<<16); // x = a + 256*256
     x >>= 8; // x is initial guess
@@ -174,6 +175,7 @@ inline mb88 sqrt(mb88 a)
 {
     int32_t x;
     int i;
+    if (a.intValue == 0 ) return 0;
     x = (a.intValue+256) >> 1; // original 16 bit version
     for (i = 0; i < 6; i++)
 		x = (x + (a.intValue/x)) >> 1; /* 8 iterations to converge */
