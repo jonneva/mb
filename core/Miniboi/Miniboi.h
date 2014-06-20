@@ -38,6 +38,7 @@ typedef struct
 typedef struct
 {
     mb14 x, y;
+    char out;
 } point2D;
 
 typedef std::vector<point2D> point2DArray;
@@ -73,7 +74,7 @@ private:
     int  round2Scanline(mb14);
     void walkEdge(uint8_t *, point2D *, point2D *);
     char clipLine(int8_t*, int8_t*, int8_t*, int8_t*);
-    char clipLine(point2D*, point2D*, point2D*, point2D*);
+    char clipLine(point2D*, point2D*);
     char clipPoly(char, point2DArray&);
 };
 

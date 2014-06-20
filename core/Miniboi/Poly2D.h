@@ -29,6 +29,7 @@ namespace Miniboi2D
         void addRotation(Transform2D&);
         void subtractRotation(Transform2D&);
         void ensureCapacity(int length);
+        int8_t fillColor, lineColor;
 
     protected:
         void insertVertex(int index, float x, float y);

@@ -9,6 +9,11 @@
     b = _t_;    \
 }
 
+#define P0CLIPPED   1
+#define P1CLIPPED   2
+#define PSWAPPED    4
+#define OUTOFBOUNDS 8
+
 point2DArray p2DArray;
 pointXYArray pXYArray;
 
@@ -383,13 +388,28 @@ void Miniboi::draw_poly(uint8_t n, point2DArray& pnts, char c, char fc){
 void Miniboi::draw_poly(Miniboi2D::Poly2D poly, char c, char fc){
     if (poly.getNumVertices() > 4) fc = -1; //only fill triangles & quads
     //p2DArray.clear();
+    // this needs clipping !!!
+    // clipping strategy...
+    // convert all points to screen coords
+    // initialize vertex number counter = 0
+    // loop thru edges:
+    //  store old endpoints
+    //  send edge to clipedge function
+    //  see what the return is and copy to new array accordingly
+    //  do not copy invalid points
+    // send clipped pointarray to drawpoly
+
+    // CLIP BEFORE THIS//
     p2DArray.resize(poly.getNumVertices());
+
     for (char i=0; i< poly.getNumVertices(); i++) {
         point2D p;
         p.x = int2mb(convertFromViewXToScreenX(poly[i].x));
         p.y = int2mb(convertFromViewYToScreenY(poly[i].y));
         p2DArray[i]=p;
     }
+
+
     draw_poly(poly.getNumVertices(),p2DArray,c,fc);
 }
 
@@ -506,21 +526,29 @@ char Miniboi::clipLine(int8_t *x0, int8_t *y0, int8_t *x1, int8_t *y1)
 	return 1; // clipped succesfully
 }
 
-char Miniboi::clipLine(point2D *p0, point2D *p1, point2D *newp0, point2D *newp1)
+char Miniboi::clipLine(point2D *p0, point2D *p1)
 {
-    // Clipline (point2D,point2D)
+    // Clipline (point2D,point2D, newpoint, newpoint)
     // clips mb14 values against window boundaries
-    // returns 0 if not clipped, 1 if clipped.
+    // returns 0 if points are within bounds
+    // bit 1 (1) set if p1 was clipped
+    // bit 2 (2) set if p2 was clipped
+    // bit 3 (4) set if points were swapped
+    // bit 4 (8) set if whole line is out of bounds
+
+    char clipval = 0; // default to out of bounds
+
     // Check X bounds
 
     if (p0->x >= 0 && p0->x <= XMAX2D && p0->y >= 0 && p0->y <= YMAX2D && p1->x >= 0 && p1->x <= XMAX2D && p1->y >= 0 && p1->y <= YMAX2D)
-    return 0; // is within window, no need to clip
+    return clipval; // is within window, no need to clip
 
 	if (p1->x < p0->x) {
         std::swap (*p1,*p0); // swap so that we dont have to check x1 also
+        clipval ^= PSWAPPED; // points have been swapped
 	}
 
-	if (p0->x>XMAX2D) return 0; // whole line is out of bounds
+	if (p0->x>XMAX2D) return OUTOFBOUNDS; // whole line is out of bounds
 
     // calculate gradient
     mb14 dx = mbSub(p1->x,p0->x);
@@ -529,40 +557,44 @@ char Miniboi::clipLine(point2D *p0, point2D *p1, point2D *newp0, point2D *newp1)
 
 	// Clip against X0 = 0
 	if (p0->x < 0) {
-        if ( p1->x < 0) return 0; // nothing visible
+        if ( p1->x < 0) return OUTOFBOUNDS; // nothing visible
         p0->y = mbAdd(p0->y,mbMul(m,-p0->x)); // get y0 at boundary
         p0->x = 0;
+        clipval |= P0CLIPPED;
 	}
 
 	// Clip against x1 = 83
 	if (p1->x > XMAX2D) {
         p1->y = mbAdd(p1->y,mbMul(m,mbSub(p1->x,XMAX2D)));
         p1->x = XMAX2D;
+        clipval |= P1CLIPPED;
 	}
 
     // Check Y bounds
 	if (p1->y<p0->y) {
         std::swap (*p1,*p0); // swap so that we dont have to check x1 also
+        clipval ^= PSWAPPED;
 	}
 
-	if (p0->y>YMAX2D) return 0; // whole line is out of bounds
+	if (p0->y>YMAX2D) return OUTOFBOUNDS; // whole line is out of bounds
 
     dx = mbSub(p1->x,p0->x);
     dy = mbSub(p1->y,p0->y);
     m = mbDiv(dx,dy);
 
     if (p0->y < 0) {
-        if ( p1->y < 0) return 0; // nothing visible
+        if ( p1->y < 0) return OUTOFBOUNDS; // nothing visible
         p0->x = mbAdd(p0->x,mbMul(m,-p0->y)); // get y0 at boundary
         p0->y = 0;
+        clipval |= P0CLIPPED;
 	}
 
     // Clip against y1 = 47
 	if (p1->y > YMAX2D) {
-        //p1->x = mbAdd(p1->x,mbMul(m,mbSub(YMAX2D,p1->y)));
         p1->y = YMAX2D;
+        clipval |= P1CLIPPED;
 	}
-	return 1; // clipped succesfully
+	return clipval; // clipped succesfully
 }
 
 // clip polygon to window boundaries

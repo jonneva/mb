@@ -46,7 +46,8 @@ void setup() {
     myfile << "Rotation angle in radians: ";
     myfile << mb882float(testangle) << "\n";
     MB.begin(&scrbuffer[0]); // pointer to screen buffer
-    TF.rotateAngleXY(float2mb(-rotangle));
+    //TF.rotateAngleXY(float2mb(-rotangle));
+    TF.setLocation(Vect2D(float2mb88(10.0f),float2mb88(15.0f)));
     TFNeg.rotateAngleXY(float2mb(-rotangle));
     //myfile << "Rotation angle: " << rotangle << "  \n";
     P1 = Poly2D(
@@ -62,6 +63,7 @@ void setup() {
     result = mb882float(test3);
     test3+=1;
     myfile << "X vector turning \n";
+    P1.add(TF);
 }
 
 void loop() {
@@ -76,13 +78,14 @@ void loop() {
         counter ++;
     }
     P1.addRotation(TF);
-    for (int i=0; i<P1.getNumVertices()-1;i++) {
-        MB.set_pixel(MB.convertFromViewXToScreenX(P1[i].x), MB.convertFromViewYToScreenY(P1[i].y),1);
-        MB.draw_line(P1[i],P1[i+1],1);
-    }
+    //for (int i=0; i<P1.getNumVertices()-1;i++) {
+    //    MB.set_pixel(MB.convertFromViewXToScreenX(P1[i].x), MB.convertFromViewYToScreenY(P1[i].y),1);
+    //    MB.draw_line(P1[i],P1[i+1],1);
+    //}
     MB.draw_line(P1[0],P1[P1.getNumVertices()-1],1);
     //MB.set_pixel(V2,1);
-    //MB.draw_poly(P1,1,0);
+    P1.fillColor = HATCH2;
+    MB.draw_poly(P1,P1.lineColor,P1.fillColor);
     MB.delay(10);
     MB.clear_screen();
 

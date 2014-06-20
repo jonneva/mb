@@ -8,12 +8,16 @@ using namespace std;
 Poly2D::Poly2D()
 {
     m_numVertices = 0;
+    fillColor = -1;
+    lineColor = 1;
 }
 
 
 Poly2D::Poly2D(const Vect2D& v0, const Vect2D& v1, const Vect2D& v2)
 {
     m_numVertices = 3;
+    fillColor = -1;
+    lineColor = 1;
     m_vec2DArray.push_back(v0);
     m_vec2DArray.push_back(v1);
     m_vec2DArray.push_back(v2);
@@ -23,6 +27,8 @@ Poly2D::Poly2D(const Vect2D& v0, const Vect2D& v1, const Vect2D& v2)
 Poly2D::Poly2D(const Vect2D& v0, const Vect2D& v1, const Vect2D& v2, const Vect2D& v3)
 {
     m_numVertices = 4;
+    fillColor = -1;
+    lineColor = 1;
     m_vec2DArray.push_back(v0);
     m_vec2DArray.push_back(v1);
     m_vec2DArray.push_back(v2);
@@ -33,6 +39,8 @@ Poly2D::Poly2D(const Vect2D& v0, const Vect2D& v1, const Vect2D& v2, const Vect2
 Poly2D::Poly2D(const Vec2DArray& v)
 {
     m_numVertices = (int)v.size();
+    fillColor = -1;
+    lineColor = 1;
     m_vec2DArray = v;
 }
 
