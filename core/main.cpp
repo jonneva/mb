@@ -31,14 +31,14 @@ int counter = 0;
 
 void setup() {
     float rotangle = (float)PI/18;
-    mb88 testangle;
-    // myfile << "Rads from 1 degrees to 90 \n";
+    mb88 testangle; mb14 testangle2;
+    myfile << "Rads from 1 degrees to 90 \n";
 
-    /*for (float m = 0; m<91 ;m++) {
+    for (float m = 0; m<91 ;m++) {
         rotangle =(float)PI/2 * (m/90);
-        testangle = rotangle;
-        myfile << mb882float(testangle) << "\n";
-    }*/
+        testangle2 = float2mb(rotangle);
+        myfile << mb2float(testangle2) << "\n";
+    }
 
     rotangle = (float)PI*2/360*10; // rotate by 5 degrees
     testangle = rotangle;
@@ -68,12 +68,12 @@ void loop() {
     //MB.set_pixel(V2,1);
     float length;
     length = mb882float(V2.length());
-    if (counter < 91) {
+    if (counter < 40) {
+        myfile << mb882float(V2.x) << " at " << counter <<" rotations \n";
         V2.addRotation(TF);
-        myfile << mb882float(V2.x) << "\n";
         counter ++;
     }
-    //P1.addRotation(TF);
+    P1.addRotation(TF);
     for (int i=0; i<P1.getNumVertices()-1;i++) {
         MB.set_pixel(MB.convertFromViewXToScreenX(P1[i].x), MB.convertFromViewYToScreenY(P1[i].y),1);
         MB.draw_line(P1[i],P1[i+1],1);
