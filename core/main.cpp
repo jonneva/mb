@@ -25,12 +25,13 @@ uint8_t scrbuffer[504]; // the screen buffer
 Vect2D V1(0,0);
 Vect2D V2(0,10);
 Transform2D TF;
+Transform2D TFNeg;
 Poly2D P1;
 int counter = 0;
 
 
 void setup() {
-    float rotangle = (float)PI/18;
+    float rotangle = -(float)PI/18;
     mb88 testangle; mb14 testangle2;
     myfile << "Rads from 1 degrees to 90 \n";
 
@@ -45,7 +46,8 @@ void setup() {
     myfile << "Rotation angle in radians: ";
     myfile << mb882float(testangle) << "\n";
     MB.begin(&scrbuffer[0]); // pointer to screen buffer
-    TF.rotateAngleXY(float2mb(rotangle));
+    TF.rotateAngleXY(float2mb(-rotangle));
+    TFNeg.rotateAngleXY(float2mb(-rotangle));
     //myfile << "Rotation angle: " << rotangle << "  \n";
     P1 = Poly2D(
             Vect2D(-10, -10),
@@ -81,7 +83,7 @@ void loop() {
     MB.draw_line(P1[0],P1[P1.getNumVertices()-1],1);
     //MB.set_pixel(V2,1);
     //MB.draw_poly(P1,1,0);
-    MB.delay(100);
+    MB.delay(10);
     MB.clear_screen();
 
 }

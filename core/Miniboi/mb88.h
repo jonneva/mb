@@ -200,7 +200,7 @@ static const int16_t sin_tab[] = {
 0x0D61,   /* 0.10471 rad, 6 deg */
 0x0F99,   /* 0.12217 rad, 7 deg */
 0x11D0,   /* 0.13962 rad, 8 deg */
-0x1406,   /* 0.15707 rad, 9 deg */
+0x1406,   /* 0.15707 rad, 9 deg 0x1406*/
 0x163A,   /* 0.17453 rad, 10 deg */
 0x186C,   /* 0.19198 rad, 11 deg */
 0x1A9D,   /* 0.20943 rad, 12 deg */
@@ -272,7 +272,7 @@ static const int16_t sin_tab[] = {
 0x7D33,   /* 1.36135 rad, 78 deg */
 0x7DA5,   /* 1.37881 rad, 79 deg */
 0x7E0D,   /* 1.39626 rad, 80 deg */
-0x7E6C,   /* 1.41371 rad, 81 deg */
+0x7E6C,   /* 1.41371 rad, 81 deg 0x1406*/
 0x7EC0,   /* 1.43116 rad, 82 deg */
 0x7F0B,   /* 1.44862 rad, 83 deg */
 0x7F4B,   /* 1.46607 rad, 84 deg */
@@ -318,7 +318,7 @@ inline mb14 fxpsin (int16_t angle) {
         return a;
     }
     //a.intValue = -sin_tab[89-index] >> 7 ; // returns -1 if angle = 270
-    a = -sin_tab[89-index] >> 1;
+    a = -sin_tab[90-index] >> 1;
     return a;
 }
 
