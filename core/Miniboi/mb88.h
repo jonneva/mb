@@ -3,6 +3,7 @@
 
 #include <string>
 #include <cmath>
+#include "Miniboi_math.h"
 
 // 0x4000 brad = π rad = 180 degrees
 static const uint BRAD_PI_SHIFT=14,   BRAD_PI = 1<<BRAD_PI_SHIFT;
@@ -76,6 +77,18 @@ inline mb88 float2mb88(float f)
 	t88.intValue = (int16_t) temp;
 	//return (int16_t)(f * (1 << 8));
 	return t88;
+}
+
+inline mb14 mb88to14(mb88 m)
+{
+	return m.intValue << 6;
+}
+
+inline mb88 mb14to88(mb14 m)
+{
+    mb88 a;
+    a.intValue = m >> 6;
+	return a;
 }
 
 inline mb88 operator + (int8_t a, mb88 b)
@@ -277,56 +290,64 @@ static const int16_t sin_tab[] = {
     l = table length
 */
 
-inline mb88 fxpsin (int16_t angle) {
+inline mb14 fxpsin (int16_t angle) {
     // angle comes in as an signed degree integer
-    mb88 a;int16_t index;
+    mb14 a;int16_t index;
     angle %= 360;
     if (angle<0) angle += 360;
     //if (angle >= 360) angle %= 360; // put angle in 0-360 range
     index = angle % 90; // put index in 1st quadrant
     // if angle = 90, index becomes 0
-    if (angle == 90) return 1;
+    if (angle == 90) return int2mb(1);
     if (angle == 180) return 0;
-    if (angle == 270) return -1;
+    if (angle == 270) return int2mb(-1);
 
     if (angle < 90) {
-        a.intValue = sin_tab[index] >> 7;
+        //a.intValue = sin_tab[index] >> 7;
+        a = sin_tab[index] >> 1; //mb14 value
         return a;
     } else if (angle < 180) {
-        a.intValue = sin_tab[90-index] >> 7 ; // returns 1 if angle =90
+        //a.intValue = sin_tab[90-index] >> 7 ; // returns 1 if angle =90
+        a = sin_tab[90-index] >> 1 ;
         return a;
     } else if (angle < 270) {
-        a.intValue = -sin_tab[index] >> 7 ; // returns 0 if angle = 180
+        //a.intValue = -sin_tab[index] >> 7 ; // returns 0 if angle = 180
+        a = -sin_tab[index] >> 1;
         return a;
     }
-    a.intValue = -sin_tab[89-index] >> 7 ; // returns -1 if angle = 270
+    //a.intValue = -sin_tab[89-index] >> 7 ; // returns -1 if angle = 270
+    a = -sin_tab[89-index] >> 1;
     return a;
 }
 
-inline mb88 fxpcos (int16_t angle) {
+inline mb14 fxpcos (int16_t angle) {
     // angle comes in as an signed degree integer
-    mb88 a;int16_t index;
+    mb14 a;int16_t index;
     angle %= 360;
     if (angle<0) angle += 360;
     //if (angle >= 360) angle %= 360; // put angle in 0-360 range
     index = angle % 90; // put index in 1st quadrant
     // if angle = 90, index becomes 0
-    if (angle == 0) return 1;
+    if (angle == 0) return int2mb(1);
     if (angle == 90) return 0;
-    if (angle == 180) return -1;
+    if (angle == 180) return int2mb(-1);
     if (angle == 270) return 0;
 
     if (angle < 90) {
-        a.intValue = sin_tab[90-index] >> 7;
+        //a.intValue = sin_tab[90-index] >> 7;
+        a = sin_tab[90-index] >> 1;
         return a;
     } else if (angle < 180) {
-        a.intValue = -sin_tab[index] >> 7 ;
+        //a.intValue = -sin_tab[index] >> 7 ;
+        a = -sin_tab[index] >> 1 ;
         return a;
     } else if (angle < 270) {
-        a.intValue = -sin_tab[90-index] >> 7 ;
+        //a.intValue = -sin_tab[90-index] >> 7 ;
+        a = -sin_tab[90-index] >> 1 ;
         return a;
     }
-    a.intValue = sin_tab[index] >> 7 ;
+    //a.intValue = sin_tab[index] >> 7 ;
+    a = sin_tab[index] >> 1 ;
     return a;
 }
 

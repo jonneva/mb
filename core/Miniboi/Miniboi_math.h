@@ -18,7 +18,7 @@ MACROS
 FIXED POINT MATH
 */
 
-typedef long mb14; // an 18.14 fixed point number
+typedef long mb14; // an 18.14 fixed point number, 1<<14 is 16384
 
 #define int2mb(n) ((n) << 14) // convert int to mb14
 #define mb2int(n) ((n) >> 14) // convert mb14 to int
@@ -31,6 +31,8 @@ typedef long mb14; // an 18.14 fixed point number
 #define mbSub(n1, n2) ((n1) - (n2)) // substract mb14
 
 #define mbHalf (1 << 13) // 0.5 in mb14
+
+#define PI14 51472 //3.141601562 vs 3.141592654
 
 extern mb14 mbDiv(mb14,mb14); // divide a mb14 by mb14
 extern mb14 mbMul(mb14,mb14); // multiply a mb14 by mb14

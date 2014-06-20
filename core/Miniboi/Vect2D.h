@@ -62,7 +62,7 @@ namespace Miniboi2D
         void subtractRotation(Transform2D&); // in a safer way than a pointer
 
     private:
-        void rotateXY(mb88,mb88);
+        void rotateXY(mb14,mb14);
 
     };  // Vect2D
 

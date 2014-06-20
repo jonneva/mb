@@ -15,17 +15,17 @@ namespace Miniboi2D
         Vect2D& getLocation();
         void setLocation(const Vect2D& v);
 
-        mb88 getCosAngleXY() const;
-        mb88 getSinAngleXY() const;
+        mb14 getCosAngleXY() const;
+        mb14 getSinAngleXY() const;
 
-        mb88 getAngleXY() const;
-        mb88 getAngle() const;
+        mb14 getAngleXY() const;
+        mb14 getAngle() const;
 
-        void setAngleXY(mb88 angleXY);
-        void setAngle(mb88 angleXY);
+        void setAngleXY(mb14 angleXY);
+        void setAngle(mb14 angleXY);
 
-        void rotateAngleXY(mb88 angle);
-        void rotateAngle(mb88 angle);
+        void rotateAngleXY(mb14 angle);
+        void rotateAngle(mb14 angle);
 
     protected:
         Vect2D m_location;
@@ -33,8 +33,8 @@ namespace Miniboi2D
     private:
         //float m_cosAngleXY;
         //float m_sinAngleXY;
-        mb88 m_cosAngleXY;
-        mb88 m_sinAngleXY;
+        mb14 m_cosAngleXY;
+        mb14 m_sinAngleXY;
 
     }; // Transform2D
 
@@ -50,51 +50,57 @@ namespace Miniboi2D
         m_location = v;
     }
 
-    inline mb88 Transform2D::getCosAngleXY() const
+    inline mb14 Transform2D::getCosAngleXY() const
     {
         return m_cosAngleXY;
     }
 
-    inline mb88 Transform2D::getSinAngleXY() const
+    inline mb14 Transform2D::getSinAngleXY() const
     {
         return m_sinAngleXY;
     }
 
 
-    inline mb88 Transform2D::getAngleXY() const
+    inline mb14 Transform2D::getAngleXY() const
     {
         //return atan2(m_sinAngleXY, m_cosAngleXY);
-        float r1 = mb882float(m_sinAngleXY);
-        float r2 = mb882float(m_cosAngleXY);
-        return float2mb88(atan2(r1, r2));
+        //float r1 = mb882float(m_sinAngleXY);
+        //float r2 = mb882float(m_cosAngleXY);
+        float r1 = mb2float(m_sinAngleXY);
+        float r2 = mb2float(m_cosAngleXY);
+        return float2mb(atan2(r1, r2));
     }
 
 
-    inline void Transform2D::setAngleXY(mb88 angleXY)
+    inline void Transform2D::setAngleXY(mb14 angleXY)
     {
         //m_cosAngleXY = cos(angleXY);
         //m_sinAngleXY = sin(angleXY);
         int angleDeg; int32_t accAngle; // needed to prevent overflow
-        accAngle = angleXY.intValue * 180;
-        accAngle /= PI88;
-        angleDeg = mb882int((int16_t)accAngle);
+        //accAngle = angleXY.intValue * 180; // old mb88 version
+        accAngle = angleXY * 180; // 32 bits should be enuff
+        //accAngle /= PI88;
+        accAngle /= PI14;
+        angleDeg = mb2int((int16_t)accAngle);
         m_cosAngleXY = fxpcos(angleDeg);
         m_sinAngleXY = fxpsin(angleDeg);
     }
 
-    inline void Transform2D::setAngle(mb88 angleXY)
+    inline void Transform2D::setAngle(mb14 angleXY)
     {
         setAngleXY(angleXY);
     }
 
 
-    inline void Transform2D::rotateAngleXY(mb88 angle)
+    inline void Transform2D::rotateAngleXY(mb14 angle)
     {
+        // this was first float, then mb88, but mb88 is not nearly
+        // accurate enough
         //if (!float_equals(mb882float(angle), 0.0f))
             setAngleXY(getAngleXY() + angle);
     }
 
-    inline void Transform2D::rotateAngle(mb88 angleXY)
+    inline void Transform2D::rotateAngle(mb14 angleXY)
     {
         rotateAngleXY(angleXY);
     }

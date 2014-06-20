@@ -1,6 +1,7 @@
 #include "Vect2D.h"
 #include "Miniboi_math.h"
 #include "Miniboi.h"
+//#include "mb88.h"
 
 #include <limits>
 #include <cmath>
@@ -83,11 +84,11 @@ string Vect2D::toString() const
 /**
     Rotate this vector in XY plane
 */
-void Vect2D::rotateXY(mb88 cosAngle, mb88 sinAngle) {
-    mb88 newX = x*cosAngle - y*sinAngle;
-    mb88 newY = x*sinAngle + y*cosAngle;
-    x = newX;
-    y = newY;
+void Vect2D::rotateXY(mb14 cosAngle, mb14 sinAngle) {
+    mb14 newX = mb88to14(x);
+    mb14 newY = mb88to14(y);
+    x = mb14to88(newX*cosAngle - newY*sinAngle);
+    y = mb14to88(newX*sinAngle + newY*cosAngle);
 }
 
 

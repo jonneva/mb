@@ -26,20 +26,27 @@ Vect2D V1(0,0);
 Vect2D V2(0,10);
 Transform2D TF;
 Poly2D P1;
-
+int counter = 0;
 
 
 void setup() {
-    float rotangle = -(float)PI/18;
-    myfile << "Rads from 1 degrees to 179";
-    for (float m = 1; m<180 ;m++) {
-        rotangle =-(float)PI/(180-m);
-        myfile << rotangle << "\n";
-    }
-    rotangle = -(float)PI/18;
+    float rotangle = (float)PI/18;
+    mb88 testangle;
+    // myfile << "Rads from 1 degrees to 90 \n";
+
+    /*for (float m = 0; m<91 ;m++) {
+        rotangle =(float)PI/2 * (m/90);
+        testangle = rotangle;
+        myfile << mb882float(testangle) << "\n";
+    }*/
+
+    rotangle = (float)PI*2/360*10; // rotate by 5 degrees
+    testangle = rotangle;
+    myfile << "Rotation angle in radians: ";
+    myfile << mb882float(testangle) << "\n";
     MB.begin(&scrbuffer[0]); // pointer to screen buffer
-    TF.rotateAngleXY(rotangle); // 10 rad
-    myfile << "Rotation angle: " << rotangle << "  \n";
+    TF.rotateAngleXY(rotangle);
+    //myfile << "Rotation angle: " << rotangle << "  \n";
     P1 = Poly2D(
             Vect2D(-10, -10),
             Vect2D(10, -10),
@@ -52,6 +59,7 @@ void setup() {
     test3=sqrt(test3);
     result = mb882float(test3);
     test3+=1;
+    myfile << "X vector turning \n";
 }
 
 void loop() {
@@ -60,7 +68,11 @@ void loop() {
     //MB.set_pixel(V2,1);
     float length;
     length = mb882float(V2.length());
-    V2.addRotation(TF);
+    if (counter < 91) {
+        V2.addRotation(TF);
+        myfile << mb882float(V2.x) << "\n";
+        counter ++;
+    }
     //P1.addRotation(TF);
     for (int i=0; i<P1.getNumVertices()-1;i++) {
         MB.set_pixel(MB.convertFromViewXToScreenX(P1[i].x), MB.convertFromViewYToScreenY(P1[i].y),1);

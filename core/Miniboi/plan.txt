@@ -8,6 +8,19 @@ Class mb88 will be overloaded with +,-,* and / operators
 this gives numeric range of -127.255 to 127.255
 multiplication and division will be done in 32 bits
 
+Tried it and its NOT a good strategy.
+
+8.8 format is not accurate enough for transform vectors, leading to
+23% error with small angles. Only from 10 degrees up (in rotation)
+you begin to get acceptable results.
+
+Transform vectors need ~4 decimal places to be accurate enough.
+
+Possibly also sine table needs more accuracy (not 16 bits).
+
+Alternative strategy to store ONLY x y coords in 8.8 format, and
+rotation angles (radians) either as floats or mb14
+
 Vector in 2D
 ============
 
