@@ -15,6 +15,7 @@
 #define OUTOFBOUNDS 8
 
 point2DArray p2DArray;
+point2DArray p2ClippedArray;
 pointXYArray pXYArray;
 
 // PUBLIC
@@ -386,6 +387,7 @@ void Miniboi::draw_poly(uint8_t n, point2DArray& pnts, char c, char fc){
 };
 
 void Miniboi::draw_poly(Miniboi2D::Poly2D poly, char c, char fc){
+    uint8_t numpoints = 0;
     if (poly.getNumVertices() > 4) fc = -1; //only fill triangles & quads
     //p2DArray.clear();
     // this needs clipping !!!
@@ -402,15 +404,89 @@ void Miniboi::draw_poly(Miniboi2D::Poly2D poly, char c, char fc){
     // CLIP BEFORE THIS//
     p2DArray.resize(poly.getNumVertices());
 
+    // Convert to screen space
+
     for (char i=0; i< poly.getNumVertices(); i++) {
         point2D p;
         p.x = int2mb(convertFromViewXToScreenX(poly[i].x));
         p.y = int2mb(convertFromViewYToScreenY(poly[i].y));
         p2DArray[i]=p;
+        numpoints++;
     }
 
+    // Clip edges
+    int8_t index, validpoints=0;
+    p2ClippedArray.clear();
+    p2ClippedArray.resize(numpoints+5);
+    for (char i=0; i<numpoints;i++) {
+        point2D P0,P1;
+        char retval;
+        index=i+1;
+        if (index == numpoints) index=0; // loop back to start
+        P0 = p2DArray[i];P1=p2DArray[index];
+        retval = clipLine(&P0,&P1);
+        // if retval is set, something has changed
+        if (retval & OUTOFBOUNDS) continue; // jump over points
+        if (retval) {
+            if (!(retval & PSWAPPED)) {
+                // if points were not swapped
+                if (retval & P0CLIPPED) {
+                    // if P0 was clipped, push in clipped p0
+                    p2ClippedArray.push_back(P0);
+                    validpoints++;
+                    }
+                else {
+                    // else push in the original point
+                    p2ClippedArray.push_back(p2DArray[i]);
+                    validpoints++;
+                    }
+                if (retval & P1CLIPPED) {
+                    // if P1 was clipped push in clipped P1
+                    p2ClippedArray.push_back(P1);
+                    validpoints++;
+                    }
+                else {
+                    // else push in original P1
+                    p2ClippedArray[i] = p2DArray[index];
+                    validpoints++;
+                    }
+            } else {
+                // points were swapped in the clip function
+                // so correct order must be restored
+                if (retval & P0CLIPPED) {
+                    // if P0 was clipped it means P1 was clipped
+                    // so push in P1 first !!
+                    p2ClippedArray.push_back(P1);
+                    validpoints++;
+                    }
+                else {
+                    // P0 was NOT clipped, push in original P0
+                    // remember, P2Darray is still in the original order !
+                    p2ClippedArray.push_back(p2DArray[i]);
+                    validpoints++;
+                    }
 
-    draw_poly(poly.getNumVertices(),p2DArray,c,fc);
+                if (retval & P1CLIPPED) {
+                    // P1 was clipped and swapped, push in P0
+                    p2ClippedArray.push_back(P0);
+                    validpoints++;
+                    }
+                else {
+                    // P1 was not clipped push original P1
+                    p2ClippedArray.push_back(p2DArray[index]);
+                    validpoints++;
+                }
+            }
+        } else {
+        // retval was returned zero, no clipping or swapping occurred
+        // push in originals
+        p2ClippedArray.push_back(p2DArray[i]);
+        p2ClippedArray.push_back(p2DArray[index]);
+        validpoints +=2;
+        }
+    }
+    if (validpoints <3) return; //its no longer a polygon !
+    draw_poly(validpoints,p2DArray,c,fc); //draw the polygon
 }
 
 // PRIVATE

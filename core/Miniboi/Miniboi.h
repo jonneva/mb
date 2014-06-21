@@ -38,7 +38,6 @@ typedef struct
 typedef struct
 {
     mb14 x, y;
-    char out;
 } point2D;
 
 typedef std::vector<point2D> point2DArray;
