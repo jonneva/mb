@@ -620,7 +620,7 @@ char Miniboi::clipLine(pointXY *p0, pointXY *p1)
 
 	// Clip against x1 = 83
 	if (p1->x > XMAX) {
-        p1->y = mbAdd(p1->y,mbMul(m,mbSub(p1->x,XMAX2D)));
+        p1->y = mbAdd(p1->y,mbMul(m,mbSub(XMAX,p1->x)));
         p1->x = XMAX;
         if (!(clipval & PSWAPPED)) clipval |= P1CLIPPED;
         else clipval |= P0CLIPPED;
