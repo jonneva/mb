@@ -65,8 +65,8 @@ public:
     void draw_rect(uint8_t,uint8_t,uint8_t,uint8_t,char,char);
     void draw_poly(uint8_t, pointXYArray&, char, char);
     void draw_poly(Poly2D, char, char);
-    int convertFromViewXToScreenX(mb88 x) const { return (int) mb882int(x) + XMAX/2; }
-    int convertFromViewYToScreenY(mb88 y) const { return (int) mb882int(-y) + YMAX/2; }
+    int convertFromViewXToScreenX(mb88 x) { return (int) round2Scanline(x) + XMAX/2; }
+    int convertFromViewYToScreenY(mb88 y) { return (int) round2Scanline(-y) + YMAX/2; } // was round2Scanline(-y) + YMAX/2;
 
 private:
     void sp(uint8_t,uint8_t,char);

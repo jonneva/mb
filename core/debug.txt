@@ -91,7 +91,7 @@ Rads from 1 degrees to 90
 1.53589
 1.55328
 1.57074
-Rotation angle in radians: 0.171875
+Rotation angle in radians: 0.433594
 X vector turning 
 0 at 0 rotations 
 0 at 1 rotations 

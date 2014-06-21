@@ -433,8 +433,6 @@ void Miniboi::draw_poly(Miniboi2D::Poly2D poly, char c, char fc){
         // if retval is set, something has changed
         if (retval & OUTOFBOUNDS) continue; // jump over points
         if (retval) {
-            if (!(retval & PSWAPPED)) {
-                // if points were not swapped
                 if (retval & P0CLIPPED) {
                     // if P0 was clipped, push in clipped p0
                     pXYClipped.push_back(P0);
@@ -450,28 +448,7 @@ void Miniboi::draw_poly(Miniboi2D::Poly2D poly, char c, char fc){
                     pXYClipped.push_back(P1);
                     validpoints++;
                     }
-            } else {
-                // points were swapped in the clip function
-                // so correct order must be restored
-                if (retval & P0CLIPPED) {
-                    // P0 was clipped.. but it was swapped
-                    // so push in P1 ans P0
-                    pXYClipped.push_back(P1);
-                    validpoints++;
-                    }
-                else {
-                    // P0 was NOT clipped, push in original P0
-                    // remember, P2Darray is still in the original order !
-                    pXYClipped.push_back(pXYArray[i]);
-                    validpoints++;
-                    }
 
-                if (retval & P1CLIPPED) {
-                    // P1 was clipped and swapped, push in P0
-                    pXYClipped.push_back(P0);
-                    validpoints++;
-                    }
-            }
         } else {
         // retval was returned zero, no clipping or swapping occurred
         // push in point 0, we know its good
@@ -509,8 +486,8 @@ int Miniboi::round2Scanline (mb14 n) {
 };
 
 int Miniboi::round2Scanline (mb88 n) {
-    if (mb88fract(n) == mb88Half) n++;
-    return mb2int(n + mbHalf);
+    if (mb88fract(n) == mb88Half) n+=1;
+    return mb882int(n + mbHalf);
 };
 
 // walk edge horizontally, storing edge y's along the way
@@ -617,7 +594,7 @@ char Miniboi::clipLine(pointXY *p0, pointXY *p1)
 
     // Check X bounds
 
-    if (p0->x >= 0 && p0->x <= XMAX && p0->y >= 0 && p0->y <= YMAX && p1->x >= 0 && p1->x <= XMAX2D && p1->y >= 0 && p1->y <= YMAX2D)
+    if (p0->x >= 0 && p0->x <= XMAX && p0->y >= 0 && p0->y <= YMAX && p1->x >= 0 && p1->x <= XMAX && p1->y >= 0 && p1->y <= YMAX)
     return clipval; // is within window, no need to clip
 
 	if (p1->x < p0->x) {
@@ -628,8 +605,8 @@ char Miniboi::clipLine(pointXY *p0, pointXY *p1)
 	if (p0->x>XMAX) return OUTOFBOUNDS; // whole line is out of bounds
 
     // calculate gradient
-    mb14 dx = mbSub(p1->x,p0->x);
-    mb14 dy = mbSub(p1->y,p0->y);
+    mb14 dx = mbSub(int2mb(p1->x),int2mb(p0->x));
+    mb14 dy = mbSub(int2mb(p1->y),int2mb(p0->y));
     mb14 m = mbDiv(dy,dx);
 
 	// Clip against X0 = 0
@@ -637,14 +614,16 @@ char Miniboi::clipLine(pointXY *p0, pointXY *p1)
         if ( p1->x < 0) return OUTOFBOUNDS; // nothing visible
         p0->y = mbAdd(p0->y,mbMul(m,-p0->x)); // get y0 at boundary
         p0->x = 0;
-        clipval |= P0CLIPPED;
+        if (!(clipval & PSWAPPED)) clipval |= P0CLIPPED;
+        else clipval |= P1CLIPPED;
 	}
 
 	// Clip against x1 = 83
 	if (p1->x > XMAX) {
         p1->y = mbAdd(p1->y,mbMul(m,mbSub(p1->x,XMAX2D)));
         p1->x = XMAX;
-        clipval |= P1CLIPPED;
+        if (!(clipval & PSWAPPED)) clipval |= P1CLIPPED;
+        else clipval |= P0CLIPPED;
 	}
 
     // Check Y bounds
@@ -655,21 +634,28 @@ char Miniboi::clipLine(pointXY *p0, pointXY *p1)
 
 	if (p0->y>YMAX) return OUTOFBOUNDS; // whole line is out of bounds
 
-    dx = mbSub(p1->x,p0->x);
-    dy = mbSub(p1->y,p0->y);
+    dx = mbSub(int2mb(p1->x),int2mb(p0->x));
+    dy = mbSub(int2mb(p1->y),int2mb(p0->y));
     m = mbDiv(dx,dy);
 
     if (p0->y < 0) {
         if ( p1->y < 0) return OUTOFBOUNDS; // nothing visible
         p0->x = mbAdd(p0->x,mbMul(m,-p0->y)); // get y0 at boundary
         p0->y = 0;
-        clipval |= P0CLIPPED;
+        if (!(clipval & PSWAPPED)) clipval |= P0CLIPPED;
+        else clipval |= P1CLIPPED;
 	}
 
     // Clip against y1 = 47
 	if (p1->y > YMAX) {
         p1->y = YMAX;
-        clipval |= P1CLIPPED;
+        if (!(clipval & PSWAPPED)) clipval |= P1CLIPPED;
+        else clipval |= P0CLIPPED;
+	}
+
+	if (clipval & PSWAPPED) {
+        // for clarity's sake, swap them back in order
+        std::swap (*p1,*p0);
 	}
 	return clipval; // clipped succesfully
 }

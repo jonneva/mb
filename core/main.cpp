@@ -41,7 +41,7 @@ void setup() {
         myfile << mb2float(testangle2) << "\n";
     }
 
-    rotangle = (float)PI*2/360*10; // rotate by 5 degrees
+    rotangle = (float)PI*2/360*25; // rotate by 5 degrees
     testangle = rotangle;
     myfile << "Rotation angle in radians: ";
     myfile << mb882float(testangle) << "\n";
@@ -50,11 +50,17 @@ void setup() {
     TF.setLocation(Vect2D(float2mb88(10.0f),float2mb88(11.0f)));
     TFNeg.rotateAngleXY(float2mb(-rotangle));
     //myfile << "Rotation angle: " << rotangle << "  \n";
+    /*P1 = Poly2D(
+            Vect2D(-5, -5),
+            Vect2D(5, -5),
+            Vect2D(5, 5),
+            Vect2D(-5, 5));*/
     P1 = Poly2D(
-            Vect2D(-10, -10),
-            Vect2D(10, -10),
-            Vect2D(10, 10),
-            Vect2D(-10, 10));
+            Vect2D(0, 15),
+            Vect2D(15, 0),
+            Vect2D(0, -15),
+            Vect2D(-15, 0));
+    P1.fillColor = HATCH2;P1.lineColor = 1;
     mb88 test1, test2,test3; float result;
     test1=103.5f;
     test2=12.7f;
@@ -67,24 +73,14 @@ void setup() {
 }
 
 void loop() {
-    MB.draw_line(V1,V2,1);
-    //MB.set_pixel(0,0,1);
-    //MB.set_pixel(V2,1);
-    float length;
-    length = mb882float(V2.length());
+
+
     if (counter < 40) {
         myfile << mb882float(V2.x) << " at " << counter <<" rotations \n";
         V2.addRotation(TF);
         counter ++;
     }
-    P1.addRotation(TF);
-    //for (int i=0; i<P1.getNumVertices()-1;i++) {
-    //    MB.set_pixel(MB.convertFromViewXToScreenX(P1[i].x), MB.convertFromViewYToScreenY(P1[i].y),1);
-    //    MB.draw_line(P1[i],P1[i+1],1);
-    //}
-    MB.draw_line(P1[0],P1[P1.getNumVertices()-1],1);
-    //MB.set_pixel(V2,1);
-    P1.fillColor = HATCH2;
+    //P1.addRotation(TF);
     MB.draw_poly(P1,P1.lineColor,P1.fillColor);
     MB.delay(10);
     MB.clear_screen();
