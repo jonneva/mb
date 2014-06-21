@@ -17,6 +17,7 @@
 point2DArray p2DArray;
 point2DArray p2ClippedArray;
 pointXYArray pXYArray;
+pointXYArray pXYClipped;
 
 // PUBLIC
 char Miniboi::begin(uint8_t* buf) {
@@ -297,11 +298,9 @@ void Miniboi::draw_rect(uint8_t x0, uint8_t y0, uint8_t w, uint8_t h, char c, ch
 	draw_line(x0,y0+h,x0+w,y0+h,c);
 } // end of draw_rect
 
-void Miniboi::draw_poly(uint8_t n, point2DArray& pnts, char c, char fc){
+void Miniboi::draw_poly(uint8_t n, pointXYArray& pnts, char c, char fc){
 
-    mb14 xmax, xmin; // extremes in 18.14 fixed point accuracy
-    int temp;
-    float t2;
+    int16_t xmax, xmin; // extremes
     uint8_t x1, x2;
     uint8_t xminPoint = 0, xmaxPoint = 0; // extremes
     uint8_t p1, p2;
@@ -312,8 +311,6 @@ void Miniboi::draw_poly(uint8_t n, point2DArray& pnts, char c, char fc){
     if (fc != -1) { // if fillcolor is set
 
     xmax = xmin = pnts[0].x; // initialize to point 0 of polygon
-    temp = mb2int(xmax);
-    t2 = mb2float(xmax);
 
     // FIND EXTREMES
     for (i = 1; i < n; i++)   // iterate through points of polygon
@@ -332,9 +329,11 @@ void Miniboi::draw_poly(uint8_t n, point2DArray& pnts, char c, char fc){
     }
 
     // ROUND THE FOUND EXTREMES TO SCANLINES
-    x1 = (uint8_t)round2Scanline(xmin);
-    x2 = (uint8_t)round2Scanline(xmax);
-
+    //x1 = (uint8_t)round2Scanline(xmin);
+    //x2 = (uint8_t)round2Scanline(xmax);
+    // disabled because already working with integer numbers
+    x1 = (xmin);
+    x2 = (xmax);
     if (x1 == x2) return; // polygon is 100% vertical = DO NOT DRAW !
 
     /* START WALKING LEFT TO RIGHT */
@@ -379,17 +378,17 @@ void Miniboi::draw_poly(uint8_t n, point2DArray& pnts, char c, char fc){
     if (c!=-1) {
          for (i = 0; i < n-1; i++)   // iterate through points of polygon
          {
-            draw_line(round2Scanline(pnts[i].x), round2Scanline(pnts[i].y),round2Scanline(pnts[i+1].x), round2Scanline(pnts[i+1].y),c);
+            draw_line(pnts[i].x, pnts[i].y,pnts[i+1].x,pnts[i+1].y,c);
          }
          // draw last line to p0
-         draw_line(round2Scanline(pnts[0].x), round2Scanline(pnts[0].y),round2Scanline(pnts[n-1].x), round2Scanline(pnts[n-1].y),c);
+         draw_line(pnts[0].x, pnts[0].y,pnts[n-1].x, pnts[n-1].y,c);
     }
 };
 
 void Miniboi::draw_poly(Miniboi2D::Poly2D poly, char c, char fc){
-    uint8_t numpoints = 0;
+    uint8_t numpoints = 0; int16_t debugval;
     if (poly.getNumVertices() > 4) fc = -1; //only fill triangles & quads
-    //p2DArray.clear();
+
     // this needs clipping !!!
     // clipping strategy...
     // convert all points to screen coords
@@ -401,29 +400,35 @@ void Miniboi::draw_poly(Miniboi2D::Poly2D poly, char c, char fc){
     //  do not copy invalid points
     // send clipped pointarray to drawpoly
 
-    // CLIP BEFORE THIS//
-    p2DArray.resize(poly.getNumVertices());
+    pXYArray.clear();
+    //pXYArray.resize(poly.getNumVertices());
 
     // Convert to screen space
 
     for (char i=0; i< poly.getNumVertices(); i++) {
-        point2D p;
-        p.x = int2mb(convertFromViewXToScreenX(poly[i].x));
-        p.y = int2mb(convertFromViewYToScreenY(poly[i].y));
-        p2DArray[i]=p;
+        pointXY p;
+        // poly is an array of vect2d's in mb88 format
+        // so basically they should just be adjusted to
+        // screen and stored to array
+        p.x = convertFromViewXToScreenX(poly[i].x);
+        p.y = convertFromViewYToScreenY(poly[i].y);
+        //pXYArray[i]=p;
+        pXYArray.push_back(p);
         numpoints++;
     }
 
+    debugval = pXYArray.size();
+
     // Clip edges
     int8_t index, validpoints=0;
-    p2ClippedArray.clear();
-    p2ClippedArray.resize(numpoints+5);
+    pXYClipped.clear();
+    //pXYClipped.resize(numpoints+5);
     for (char i=0; i<numpoints;i++) {
-        point2D P0,P1;
+        pointXY P0,P1;
         char retval;
         index=i+1;
         if (index == numpoints) index=0; // loop back to start
-        P0 = p2DArray[i];P1=p2DArray[index];
+        P0 = pXYArray[i];P1=pXYArray[index];
         retval = clipLine(&P0,&P1);
         // if retval is set, something has changed
         if (retval & OUTOFBOUNDS) continue; // jump over points
@@ -432,61 +437,51 @@ void Miniboi::draw_poly(Miniboi2D::Poly2D poly, char c, char fc){
                 // if points were not swapped
                 if (retval & P0CLIPPED) {
                     // if P0 was clipped, push in clipped p0
-                    p2ClippedArray.push_back(P0);
+                    pXYClipped.push_back(P0);
                     validpoints++;
                     }
                 else {
                     // else push in the original point
-                    p2ClippedArray.push_back(p2DArray[i]);
+                    pXYClipped.push_back(pXYArray[i]);
                     validpoints++;
                     }
                 if (retval & P1CLIPPED) {
-                    // if P1 was clipped push in clipped P1
-                    p2ClippedArray.push_back(P1);
-                    validpoints++;
-                    }
-                else {
-                    // else push in original P1
-                    p2ClippedArray[i] = p2DArray[index];
+                    // if P1 was clipped also push in clipped P1
+                    pXYClipped.push_back(P1);
                     validpoints++;
                     }
             } else {
                 // points were swapped in the clip function
                 // so correct order must be restored
                 if (retval & P0CLIPPED) {
-                    // if P0 was clipped it means P1 was clipped
-                    // so push in P1 first !!
-                    p2ClippedArray.push_back(P1);
+                    // P0 was clipped.. but it was swapped
+                    // so push in P1 ans P0
+                    pXYClipped.push_back(P1);
                     validpoints++;
                     }
                 else {
                     // P0 was NOT clipped, push in original P0
                     // remember, P2Darray is still in the original order !
-                    p2ClippedArray.push_back(p2DArray[i]);
+                    pXYClipped.push_back(pXYArray[i]);
                     validpoints++;
                     }
 
                 if (retval & P1CLIPPED) {
                     // P1 was clipped and swapped, push in P0
-                    p2ClippedArray.push_back(P0);
+                    pXYClipped.push_back(P0);
                     validpoints++;
                     }
-                else {
-                    // P1 was not clipped push original P1
-                    p2ClippedArray.push_back(p2DArray[index]);
-                    validpoints++;
-                }
             }
         } else {
         // retval was returned zero, no clipping or swapping occurred
-        // push in originals
-        p2ClippedArray.push_back(p2DArray[i]);
-        p2ClippedArray.push_back(p2DArray[index]);
-        validpoints +=2;
+        // push in point 0, we know its good
+        pXYClipped.push_back(pXYArray[i]);
+        validpoints ++;
         }
     }
+    debugval = pXYClipped.size();
     if (validpoints <3) return; //its no longer a polygon !
-    draw_poly(validpoints,p2DArray,c,fc); //draw the polygon
+    draw_poly(validpoints,pXYClipped,c,fc); //draw the polygon
 }
 
 // PRIVATE
@@ -514,16 +509,18 @@ int Miniboi::round2Scanline (mb14 n) {
 };
 
 // walk edge horizontally, storing edge y's along the way
-void Miniboi::walkEdge(uint8_t *edgeTable, point2D *p1, point2D *p2)
+void Miniboi::walkEdge(uint8_t *edgeTable, pointXY *p1, pointXY *p2)
 {
     mb14 y, dy;
     int dx, x1, x2,temp;
 
     // make sure p1 of edge is leftmost
-    if (p2->x < p1->x) swapWT(point2D *, p1, p2);
+    if (p2->x < p1->x) swapWT(pointXY *, p1, p2);
 
-    x1 = round2Scanline(p1->x);
-    x2 = round2Scanline(p2->x);
+    //x1 = round2Scanline(p1->x);
+    //x2 = round2Scanline(p2->x);
+    x1 = (p1->x);
+    x2 = (p2->x);
     dx = x2 - x1;
 
     if (dx == 0) return; // avoid divide by zero
@@ -531,8 +528,8 @@ void Miniboi::walkEdge(uint8_t *edgeTable, point2D *p1, point2D *p2)
     // top left included, bottom right excluded
     dx = (((2) > (dx-1)) ? (2) : (dx-1));
 
-    y = p1->y;  // starting y for walk
-    dy = mbDiv((p2->y - p1->y), int2mb(dx)); // y increment for walk
+    y = int2mb(p1->y);  // starting y for walk
+    dy = mbDiv(int2mb((p2->y - p1->y)), int2mb(dx)); // y increment for walk
 
     do {
         temp = mb2int(y);
@@ -602,10 +599,9 @@ char Miniboi::clipLine(int8_t *x0, int8_t *y0, int8_t *x1, int8_t *y1)
 	return 1; // clipped succesfully
 }
 
-char Miniboi::clipLine(point2D *p0, point2D *p1)
+char Miniboi::clipLine(pointXY *p0, pointXY *p1)
 {
-    // Clipline (point2D,point2D, newpoint, newpoint)
-    // clips mb14 values against window boundaries
+    // clips int16_t values against window boundaries
     // returns 0 if points are within bounds
     // bit 1 (1) set if p1 was clipped
     // bit 2 (2) set if p2 was clipped
@@ -616,7 +612,7 @@ char Miniboi::clipLine(point2D *p0, point2D *p1)
 
     // Check X bounds
 
-    if (p0->x >= 0 && p0->x <= XMAX2D && p0->y >= 0 && p0->y <= YMAX2D && p1->x >= 0 && p1->x <= XMAX2D && p1->y >= 0 && p1->y <= YMAX2D)
+    if (p0->x >= 0 && p0->x <= XMAX && p0->y >= 0 && p0->y <= YMAX && p1->x >= 0 && p1->x <= XMAX2D && p1->y >= 0 && p1->y <= YMAX2D)
     return clipval; // is within window, no need to clip
 
 	if (p1->x < p0->x) {
@@ -624,7 +620,7 @@ char Miniboi::clipLine(point2D *p0, point2D *p1)
         clipval ^= PSWAPPED; // points have been swapped
 	}
 
-	if (p0->x>XMAX2D) return OUTOFBOUNDS; // whole line is out of bounds
+	if (p0->x>XMAX) return OUTOFBOUNDS; // whole line is out of bounds
 
     // calculate gradient
     mb14 dx = mbSub(p1->x,p0->x);
@@ -640,9 +636,9 @@ char Miniboi::clipLine(point2D *p0, point2D *p1)
 	}
 
 	// Clip against x1 = 83
-	if (p1->x > XMAX2D) {
+	if (p1->x > XMAX) {
         p1->y = mbAdd(p1->y,mbMul(m,mbSub(p1->x,XMAX2D)));
-        p1->x = XMAX2D;
+        p1->x = XMAX;
         clipval |= P1CLIPPED;
 	}
 
@@ -652,7 +648,7 @@ char Miniboi::clipLine(point2D *p0, point2D *p1)
         clipval ^= PSWAPPED;
 	}
 
-	if (p0->y>YMAX2D) return OUTOFBOUNDS; // whole line is out of bounds
+	if (p0->y>YMAX) return OUTOFBOUNDS; // whole line is out of bounds
 
     dx = mbSub(p1->x,p0->x);
     dy = mbSub(p1->y,p0->y);
@@ -666,8 +662,8 @@ char Miniboi::clipLine(point2D *p0, point2D *p1)
 	}
 
     // Clip against y1 = 47
-	if (p1->y > YMAX2D) {
-        p1->y = YMAX2D;
+	if (p1->y > YMAX) {
+        p1->y = YMAX;
         clipval |= P1CLIPPED;
 	}
 	return clipval; // clipped succesfully
@@ -680,4 +676,5 @@ char Miniboi::clipPoly(char n, point2DArray& pnts)
     for (char i = 0; i<n; i++) {
 
     }
+    return 0;
 }

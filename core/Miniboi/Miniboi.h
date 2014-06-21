@@ -32,7 +32,7 @@
 
 typedef struct
 {
-    uint8_t x, y; // screen xy coordinates
+    int16_t x, y; // screen xy coordinates, 8 bits is not enough
 } pointXY;
 
 typedef struct
@@ -63,7 +63,7 @@ public:
     void draw_column(uint8_t, uint16_t, uint16_t, uint8_t);
     void draw_row(uint8_t, uint16_t, uint16_t, uint8_t);
     void draw_rect(uint8_t,uint8_t,uint8_t,uint8_t,char,char);
-    void draw_poly(uint8_t, point2DArray&, char, char);
+    void draw_poly(uint8_t, pointXYArray&, char, char);
     void draw_poly(Poly2D, char, char);
     int convertFromViewXToScreenX(mb88 x) const { return (int) mb882int(x) + XMAX/2; }
     int convertFromViewYToScreenY(mb88 y) const { return (int) mb882int(-y) + YMAX/2; }
@@ -71,9 +71,9 @@ public:
 private:
     void sp(uint8_t,uint8_t,char);
     int  round2Scanline(mb14);
-    void walkEdge(uint8_t *, point2D *, point2D *);
+    void walkEdge(uint8_t *, pointXY *, pointXY *);
     char clipLine(int8_t*, int8_t*, int8_t*, int8_t*);
-    char clipLine(point2D*, point2D*);
+    char clipLine(pointXY*, pointXY*);
     char clipPoly(char, point2DArray&);
 };
 
