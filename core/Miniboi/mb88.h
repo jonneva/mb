@@ -5,6 +5,8 @@
 #include <cmath>
 #include "Miniboi_math.h"
 
+#define mb88Half (1 << 7) // 0.5 in mb88
+
 // 0x4000 brad = π rad = 180 degrees
 static const uint BRAD_PI_SHIFT=14,   BRAD_PI = 1<<BRAD_PI_SHIFT;
 static const uint BRAD_HPI= BRAD_PI/2, BRAD_2PI= BRAD_PI*2;
@@ -114,34 +116,6 @@ inline mb88 operator / (int8_t a, mb88 b)
 inline mb88 operator / (int16_t a, mb88 b)
 { mb88 r(a); r /= b; return r; }
 
-
-
-// math functions
-// no default implementation
-/*
-template <int p>
-inline fixed_point<p> sin(fixed_point<p> a);
-
-template <int p>
-inline fixed_point<p> cos(fixed_point<p> a);
-
-template <int p>
-inline fixed_point<p> sqrt(fixed_point<p> a);
-
-template <int p>
-inline fixed_point<p> rsqrt(fixed_point<p> a);
-
-template <int p>
-inline fixed_point<p> inv(fixed_point<p> a);
-
-template <int p>
-inline fixed_point<p> abs(fixed_point<p> a)
-{
-	fixed_point<p> r;
-	r.intValue = a.intValue > 0 ? a.intValue : -a.intValue;
-	return r;
-}
-*/
 
 inline int8_t mb882int (mb88 a)
 {

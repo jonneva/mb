@@ -71,6 +71,7 @@ public:
 private:
     void sp(uint8_t,uint8_t,char);
     int  round2Scanline(mb14);
+    int  round2Scanline(mb88);
     void walkEdge(uint8_t *, pointXY *, pointXY *);
     char clipLine(int8_t*, int8_t*, int8_t*, int8_t*);
     char clipLine(pointXY*, pointXY*);

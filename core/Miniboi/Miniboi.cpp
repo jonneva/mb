@@ -508,6 +508,11 @@ int Miniboi::round2Scanline (mb14 n) {
     return mb2int(n + mbHalf);
 };
 
+int Miniboi::round2Scanline (mb88 n) {
+    if (mb88fract(n) == mb88Half) n++;
+    return mb2int(n + mbHalf);
+};
+
 // walk edge horizontally, storing edge y's along the way
 void Miniboi::walkEdge(uint8_t *edgeTable, pointXY *p1, pointXY *p2)
 {
