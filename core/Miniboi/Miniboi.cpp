@@ -378,9 +378,23 @@ void Miniboi::draw_poly(uint8_t n, pointXYArray& pnts, char c, char fc){
     if (c!=-1) {
          for (i = 0; i < n-1; i++)   // iterate through points of polygon
          {
+            if ((pnts[i].x == pnts[i+1].x) || (pnts[i].y == pnts[i+1].y ))
+            {
+                if (pnts[i].x == 0 || pnts[i].x == XMAX || pnts[i].y == 0 || pnts[i].y == YMAX)
+                {
+                    continue;
+                }
+            }
             draw_line(pnts[i].x, pnts[i].y,pnts[i+1].x,pnts[i+1].y,c);
          }
          // draw last line to p0
+         if ((pnts[0].x == pnts[n-1].x) || (pnts[0].y == pnts[n-1].y ))
+            {
+                if (pnts[0].x == 0 || pnts[0].x == XMAX || pnts[n-1].y == 0 || pnts[n-1].y == YMAX)
+                {
+                    return;
+                }
+            }
          draw_line(pnts[0].x, pnts[0].y,pnts[n-1].x, pnts[n-1].y,c);
     }
 };
