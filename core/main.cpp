@@ -47,7 +47,7 @@ void setup() {
     myfile << mb882float(testangle) << "\n";
     MB.begin(&scrbuffer[0]); // pointer to screen buffer
     //TF.rotateAngleXY(float2mb(-rotangle));
-    TF.setLocation(Vect2D(float2mb88(30.0f),float2mb88(0.0f)));
+    TF.setLocation(Vect2D(float2mb88(0.0f),float2mb88(-15.0f)));
     TFNeg.rotateAngleXY(float2mb(-rotangle));
     //myfile << "Rotation angle: " << rotangle << "  \n";
     /*P1 = Poly2D(
@@ -56,10 +56,10 @@ void setup() {
             Vect2D(5, 5),
             Vect2D(-5, 5));*/
     P1 = Poly2D(
-            Vect2D(0, 15),
-            Vect2D(15, 0),
             Vect2D(0, -15),
-            Vect2D(-15, 0));
+            Vect2D(-15, 0),
+            Vect2D(0, 15),
+            Vect2D(15, 0));
     P1.fillColor = HATCH2;P1.lineColor = 1;
     mb88 test1, test2,test3; float result;
     test1=103.5f;
