@@ -4,6 +4,7 @@
 mb14 mbDiv(mb14 n1 , mb14 n2) {
     long long int n64;
     n64 = (long long int)n1<<14;
+    if (n2 == 0) return 0;
     n64 = n64 / n2;
     return (mb14) n64;
 }

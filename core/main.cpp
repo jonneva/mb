@@ -41,13 +41,13 @@ void setup() {
         myfile << mb2float(testangle2) << "\n";
     }
 
-    rotangle = (float)PI*2/360*25; // rotate by 5 degrees
+    rotangle = (float)PI*2/360*5; // rotate by 5 degrees
     testangle = rotangle;
     myfile << "Rotation angle in radians: ";
     myfile << mb882float(testangle) << "\n";
     MB.begin(&scrbuffer[0]); // pointer to screen buffer
-    //TF.rotateAngleXY(float2mb(-rotangle));
-    TF.setLocation(Vect2D(float2mb88(0.0f),float2mb88(-15.0f)));
+    TF.rotateAngleXY(float2mb(-rotangle));
+    TF.setLocation(Vect2D(float2mb88(-30.0f),float2mb88(-15.0f)));
     TFNeg.rotateAngleXY(float2mb(-rotangle));
     //myfile << "Rotation angle: " << rotangle << "  \n";
     /*P1 = Poly2D(
@@ -80,9 +80,9 @@ void loop() {
         V2.addRotation(TF);
         counter ++;
     }
-    //P1.addRotation(TF);
+    P1.addRotation(TF);
     MB.draw_poly(P1,P1.lineColor,P1.fillColor);
-    MB.delay(10);
+    MB.delay(100);
     MB.clear_screen();
 
 }
