@@ -29,7 +29,7 @@ Transform2D TFNeg;
 Poly2D P1;
 Poly2D Star;
 int counter = 0;
-float scale = 0.01f;
+float scale = 1.0f;
 
 
 void setup() {
@@ -43,7 +43,7 @@ void setup() {
         myfile << mb2float(testangle2) << "\n";
     }
 
-    rotangle = (float)PI*2/360*5; // rotate by 5 degrees
+    rotangle = (float)PI*2/360*40; // rotate by 5 degrees, was 40
     testangle = rotangle;
     myfile << "Rotation angle in radians: ";
     myfile << mb882float(testangle) << "\n";
@@ -63,10 +63,10 @@ void setup() {
 }
 
 void loop() {
-    P1.addRotation(TF);
+    //P1.addRotation(TF);
     MB.draw_poly(P1,P1.lineColor,P1.fillColor);
-    MB.delay(10);
-    P1.scale(1.01f);
+    MB.delay(90);
+    //P1.scale(1.01f);
     MB.clear_screen();
 }
 
