@@ -29,6 +29,7 @@ namespace Miniboi2D
         void addRotation(Transform2D&);
         void subtractRotation(Transform2D&);
         void ensureCapacity(int length);
+        void scale(mb88);
         int8_t fillColor, lineColor;
 
     protected:

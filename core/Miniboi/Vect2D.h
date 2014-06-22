@@ -60,6 +60,7 @@ namespace Miniboi2D
         void subtract(Transform2D&); // using a reference, you can manipulate
         void addRotation(Transform2D&); // the original data using a variable
         void subtractRotation(Transform2D&); // in a safer way than a pointer
+        void scale(mb88);
 
     private:
         void rotateXY(mb14,mb14);

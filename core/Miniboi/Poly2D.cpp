@@ -100,6 +100,13 @@ void Poly2D::subtractRotation(Transform2D& xform) {
     }
 }
 
+void Poly2D::scale(mb88 s) {
+    for (int i=0; i!=m_numVertices; i++) {
+        m_vec2DArray[i].x *= s;
+        m_vec2DArray[i].y *= s;
+    }
+}
+
 
 
 // Increase the size of the vertex array by length

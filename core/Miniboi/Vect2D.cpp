@@ -137,5 +137,14 @@ void Vect2D::subtractRotation(Transform2D& xform) {
     // note that sin(-x) == -sin(x) and cos(-x) == cos(x)
     rotateXY(xform.getCosAngleXY(), -xform.getSinAngleXY());
 }
+
+/**
+    Scales the vector
+*/
+void Vect2D::scale(mb88 s) {
+    x *= s;
+    y *= s;
+}
+
 }
 

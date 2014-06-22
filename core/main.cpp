@@ -27,7 +27,9 @@ Vect2D V2(0,10);
 Transform2D TF;
 Transform2D TFNeg;
 Poly2D P1;
+Poly2D Star;
 int counter = 0;
+float scale = 0.01f;
 
 
 void setup() {
@@ -47,44 +49,25 @@ void setup() {
     myfile << mb882float(testangle) << "\n";
     MB.begin(&scrbuffer[0]); // pointer to screen buffer
     TF.rotateAngleXY(float2mb(-rotangle));
-    TF.setLocation(Vect2D(float2mb88(-30.0f),float2mb88(-15.0f)));
-    TFNeg.rotateAngleXY(float2mb(-rotangle));
-    //myfile << "Rotation angle: " << rotangle << "  \n";
-    /*P1 = Poly2D(
-            Vect2D(-5, -5),
-            Vect2D(5, -5),
-            Vect2D(5, 5),
-            Vect2D(-5, 5));*/
+    TF.setLocation(Vect2D(float2mb88(0.0f),float2mb88(0.0f)));
     P1 = Poly2D(
-            Vect2D(0, -15),
-            Vect2D(-15, 0),
-            Vect2D(0, 15),
-            Vect2D(15, 0));
+            Vect2D(-35, 10 ),
+            Vect2D(35, 10),
+            Vect2D(35, -10),
+            Vect2D(-35, -10));
+    Vec2DArray SP;
+    Star = Poly2D(SP);
     P1.fillColor = HATCH2;P1.lineColor = 1;
-    mb88 test1, test2,test3; float result;
-    test1=103.5f;
-    test2=12.7f;
-    test3=10.0f;
-    test3=sqrt(test3);
-    result = mb882float(test3);
-    test3+=1;
-    myfile << "X vector turning \n";
+    P1.scale(scale);
     P1.add(TF);
 }
 
 void loop() {
-
-
-    if (counter < 40) {
-        myfile << mb882float(V2.x) << " at " << counter <<" rotations \n";
-        V2.addRotation(TF);
-        counter ++;
-    }
     P1.addRotation(TF);
     MB.draw_poly(P1,P1.lineColor,P1.fillColor);
-    MB.delay(100);
+    MB.delay(10);
+    P1.scale(1.01f);
     MB.clear_screen();
-
 }
 
 
